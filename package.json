@@ -5,18 +5,30 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "hub": "node server.js",
-    "voice": "npm --prefix VoiceStudio start",
-    "voice:dev": "npm --prefix VoiceStudio run dev",
-    "humanizer": "npm --prefix TextHumanizer start",
-    "ductus": "npm --prefix \"Ductus (FLOWCHART)\" run dev",
-    "ident": "npm --prefix \"Ident - Brand Naming Studio\" run dev",
-    "mediadrop": "npm --prefix MediaDrop run dev",
-    "photonarrator": "npm --prefix PhotoNarrator run dev"
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "legacy:server": "node server.js"
   },
   "dependencies": {
+    "@breezystack/lamejs": "^1.2.7",
+    "@google/genai": "^2.25.0",
+    "autoprefixer": "^10.6.1",
     "express": "^5.2.1",
-    "http-proxy-middleware": "^4.2.0"
+    "http-proxy-middleware": "^4.2.0",
+    "lucide-react": "^1.49.0",
+    "mermaid": "^12.0.0",
+    "next": "^16.3.8",
+    "postcss": "^8.5.28",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^7.0.2"
   }
 }
