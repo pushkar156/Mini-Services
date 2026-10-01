@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ductus — Flowchart Studio</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/shared/api-key-modal.css" />
+  <link rel="stylesheet" href="/shared/navbar.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/src/index.css">
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen">
+  <ovi-navbar current="ductus"></ovi-navbar>
+
+  <div id="root"></div>
+
+  <script src="/shared/api-key-manager.js"></script>
+  <script src="/shared/ollama-client.js"></script>
+  <script src="/shared/api-key-modal.js"></script>
+  <script src="/shared/navbar.js"></script>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    // Making mermaid globally available for React components to use
+    window.mermaid = mermaid;
+  </script>
+  <script type="module" src="/src/index.tsx"></script>
+</body>
+
+</html>

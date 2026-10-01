@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OVI Hub — Unified Creative &amp; AI Micro-Services Suite</title>
+  <meta name="description" content="Central workstation and launcher for OVI Hub micro-services: Voice Studio, Text Humanizer, Ductus Flowcharts, Ident Brand Studio, MediaDrop, and PhotoNarrator." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/shared/api-key-modal.css" />
+  <link rel="stylesheet" href="/shared/navbar.css" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body class="theme-dark">
+
+  <!-- Ambient Glow Orbs -->
+  <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+  <div class="ambient-glow glow-top-right" aria-hidden="true"></div>
+  <div class="ambient-glow glow-center" aria-hidden="true"></div>
+
+  <!-- Unified Global Navbar -->
+  <ovi-navbar current="home"></ovi-navbar>
+
+  <div class="hub-container">
+    
+    <!-- Hero Section -->
+    <header class="hub-hero">
+      <div class="hub-kicker">
+        <span class="kicker-dot"></span>
+        <span>OVI Micro-Services Workstation</span>
+        <span>&bull;</span>
+        <span>Unified AI Architecture</span>
+      </div>
+
+      <h1 class="hub-title">
+        One Unified Hub for Your <span class="gradient-text-cyan">Creative AI</span> &amp; <span class="gradient-text-warm">Productivity Engines</span>.
+      </h1>
+
+      <p class="hub-subtitle">
+        Jump directly into high-fidelity voice synthesis, anti-AI text humanization, diagram generation, brand identity design, social scrapers, and photo narration with centralized Bring-Your-Own-Key management.
+      </p>
+
+      <!-- Engine Live Status Strip -->
+      <div class="engine-status-bar">
+        <div class="engine-pill" id="geminiStatusPill">
+          <span class="status-dot-sm dot-amber" id="geminiDot"></span>
+          <span id="geminiStatusText">Gemini Key: Checking...</span>
+        </div>
+
+        <div class="engine-divider"></div>
+
+        <div class="engine-pill" id="ollamaStatusPill">
+          <span class="status-dot-sm dot-amber" id="ollamaDot"></span>
+          <span id="ollamaStatusText">Ollama: Checking...</span>
+        </div>
+
+        <div class="engine-divider"></div>
+
+        <button type="button" class="btn-engine-config" id="btnConfigureAi">
+          ⚙️ Manage Engines &amp; Keys
+        </button>
+      </div>
+    </header>
+
+    <!-- Services Grid Section -->
+    <main class="services-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Available Micro-Services</h2>
+          <p class="section-desc">Independent modular services with isolated themes, styling, and runtimes.</p>
+        </div>
+      </div>
+
+      <div class="services-grid">
+        
+        <!-- 1. Voice Studio -->
+        <article class="service-card" style="--card-accent: #f43f5e;">
+          <div class="card-top">
+            <div class="service-icon-box icon-voice">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+            </div>
+            <div class="service-badges-group">
+              <span class="service-tag">Voice &amp; Audio</span>
+              <span class="provider-tag provider-gemini-only">⚡ Gemini 24kHz</span>
+            </div>
+          </div>
+          <h3 class="service-card-title">Gemini Voice Studio</h3>
+          <p class="service-card-desc">
+            Studio-grade 24,000Hz text-to-speech synthesis with 30+ expressive modules, custom emotional direction, and multi-speaker dialogue staging with instant MP3 and WAV export.
+          </p>
+          <div class="feature-pills">
+            <span class="pill-item">24kHz PCM</span>
+            <span class="pill-item">Dual Speakers</span>
+            <span class="pill-item">Failover Engine</span>
+            <span class="pill-item">MP3 / WAV</span>
+          </div>
+          <div class="card-bottom-actions">
+            <a href="/voice" class="btn-launch-primary">
+              <span>Launch Studio</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <span class="service-port-badge">ROUTE: /voice</span>
+          </div>
+        </article>
+
+        <!-- 2. Text Humanizer -->
+        <article class="service-card" style="--card-accent: #10b981;">
+          <div class="card-top">
+            <div class="service-icon-box icon-humanizer">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m18 2 4 4-14 14H4v-4L18 2z"/><path d="m14.5 5.5 4 4"/></svg>
+            </div>
+            <div class="service-badges-group">
+              <span class="service-tag">Writing &amp; Prose</span>
+              <span class="provider-tag provider-hybrid">✨ Gemini or Ollama</span>
+            </div>
+          </div>
+          <h3 class="service-card-title">AI Text Humanizer</h3>
+          <p class="service-card-desc">
+            Anti-AI text rewriter that strips robotic clichés ('delve', 'rich tapestry', 'pivotal role') and injects human burstiness, varied cadence, and natural idioms.
+          </p>
+          <div class="feature-pills">
+            <span class="pill-item">Anti-AI Detector</span>
+            <span class="pill-item">Burstiness Boost</span>
+            <span class="pill-item">Cliché Eradication</span>
+            <span class="pill-item">Perplexity Tuner</span>
+          </div>
+          <div class="card-bottom-actions">
+            <a href="/humanizer" class="btn-launch-primary">
+              <span>Launch Humanizer</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <span class="service-port-badge">ROUTE: /humanizer</span>
+          </div>
+        </article>
+
+        <!-- 3. Ductus (FLOWCHART) -->
+        <article class="service-card" style="--card-accent: #38bdf8;">
+          <div class="card-top">
+            <div class="service-icon-box icon-ductus">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M10 6.5h4"/><path d="M6.5 10v4"/><path d="M17.5 10v4"/><path d="M10 17.5h4"/></svg>
+            </div>
+            <div class="service-badges-group">
+              <span class="service-tag">Architecture</span>
+              <span class="provider-tag provider-hybrid">✨ Gemini or Ollama</span>
+            </div>
+          </div>
+          <h3 class="service-card-title">Ductus Flowchart Studio</h3>
+          <p class="service-card-desc">
+            Transform conceptual ideas, technical specs, or whiteboard image sketches into interactive, logically organized Mermaid workflow diagrams instantly.
+          </p>
+          <div class="feature-pills">
+            <span class="pill-item">Mermaid.js</span>
+            <span class="pill-item">Visual Reasoning</span>
+            <span class="pill-item">Multimodal Image</span>
+            <span class="pill-item">SVG/PNG Export</span>
+          </div>
+          <div class="card-bottom-actions">
+            <a href="/ductus" class="btn-launch-primary">
+              <span>Launch Ductus</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <span class="service-port-badge">ROUTE: /ductus</span>
+          </div>
+        </article>
+
+        <!-- 4. Ident - Brand Naming Studio -->
+        <article class="service-card" style="--card-accent: #a855f7;">
+          <div class="card-top">
+            <div class="service-icon-box icon-ident">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
+            <div class="service-badges-group">
+              <span class="service-tag">Branding</span>
+              <span class="provider-tag provider-hybrid">✨ Gemini + Search</span>
+            </div>
+          </div>
+          <h3 class="service-card-title">Ident Brand Studio</h3>
+          <p class="service-card-desc">
+            Generate creative brand identities, linguistic analyses, and market rationale verified with Google Search grounding to ensure uniqueness and availability.
+          </p>
+          <div class="feature-pills">
+            <span class="pill-item">Google Search Grounded</span>
+            <span class="pill-item">Linguistic Fit</span>
+            <span class="pill-item">Domain Heuristics</span>
+            <span class="pill-item">Visual Vibe Match</span>
+          </div>
+          <div class="card-bottom-actions">
+            <a href="/ident" class="btn-launch-primary">
+              <span>Launch Ident</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <span class="service-port-badge">ROUTE: /ident</span>
+          </div>
+        </article>
+
+        <!-- 5. MediaDrop -->
+        <article class="service-card" style="--card-accent: #f59e0b;">
+          <div class="card-top">
+            <div class="service-icon-box icon-media">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </div>
+            <div class="service-badges-group">
+              <span class="service-tag">Media Utilities</span>
+              <span class="provider-tag provider-scraper">🚀 Scraper Engine</span>
+            </div>
+          </div>
+          <h3 class="service-card-title">MediaDrop</h3>
+          <p class="service-card-desc">
+            High-speed multi-platform social media media extractor. Download full-resolution videos, reels, photos, and carousels across Instagram, TikTok, Pinterest, and Twitter.
+          </p>
+          <div class="feature-pills">
+            <span class="pill-item">Instagram Reels</span>
+            <span class="pill-item">Pinterest 4K</span>
+            <span class="pill-item">TikTok Clean</span>
+            <span class="pill-item">No API Key Needed</span>
+          </div>
+          <div class="card-bottom-actions">
+            <a href="/mediadrop" class="btn-launch-primary">
+              <span>Launch MediaDrop</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <span class="service-port-badge">ROUTE: /mediadrop</span>
+          </div>
+        </article>
+
+        <!-- 6. PhotoNarrator -->
+        <article class="service-card" style="--card-accent: #06b6d4;">
+          <div class="card-top">
+            <div class="service-icon-box icon-photo">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </div>
+            <div class="service-badges-group">
+              <span class="service-tag">Art &amp; Vision</span>
+              <span class="provider-tag provider-gemini-only">⚡ Gemini Vision</span>
+            </div>
+          </div>
+          <h3 class="service-card-title">PhotoNarrator</h3>
+          <p class="service-card-desc">
+            AI art historian and photography storyteller. Identifies historical artwork, artists, and symbolism, or writes captivating, atmospheric narrative prose for personal photography.
+          </p>
+          <div class="feature-pills">
+            <span class="pill-item">Art History</span>
+            <span class="pill-item">Symbolism Engine</span>
+            <span class="pill-item">Next.js + Genkit</span>
+            <span class="pill-item">Multimodal</span>
+          </div>
+          <div class="card-bottom-actions">
+            <a href="/photonarrator" class="btn-launch-primary">
+              <span>Launch PhotoNarrator</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <span class="service-port-badge">ROUTE: /photonarrator</span>
+          </div>
+        </article>
+
+      </div>
+    </main>
+
+    <!-- Quick Start Helper Strip -->
+    <section class="quickstart-section">
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem;">Developer Quick Start Guide</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">Launch any microservice locally from your terminal in its respective directory.</p>
+      
+      <div class="quickstart-grid">
+        <div class="qs-card">
+          <div class="qs-step-badge">1. Voice Studio &amp; Humanizer</div>
+          <h4>Node / Express Services</h4>
+          <p>Standard npm dev or start scripts:</p>
+          <code class="qs-code">cd VoiceStudio && npm run dev</code>
+          <code class="qs-code">cd TextHumanizer && npm start</code>
+        </div>
+
+        <div class="qs-card">
+          <div class="qs-step-badge">2. Ductus &amp; Ident</div>
+          <h4>React + Vite Frontends</h4>
+          <p>Start independent Vite dev servers on assigned ports:</p>
+          <code class="qs-code">cd "Ductus (FLOWCHART)" && npm run dev -- --port 3002</code>
+          <code class="qs-code">cd "Ident - Brand Naming Studio" && npm run dev -- --port 3003</code>
+        </div>
+
+        <div class="qs-card">
+          <div class="qs-step-badge">3. MediaDrop &amp; PhotoNarrator</div>
+          <h4>Full-Stack Python &amp; Next.js</h4>
+          <p>Execute local server runners:</p>
+          <code class="qs-code">cd MediaDrop && npm run dev</code>
+          <code class="qs-code">cd PhotoNarrator && npm run dev</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="hub-footer">
+      <p>&copy; 2026 OVI Hub &middot; Unified Micro-Services Creative Workstation &middot; Built with modern web standards</p>
+    </footer>
+
+  </div>
+
+  <!-- Shared Scripts -->
+  <script src="/shared/api-key-manager.js"></script>
+  <script src="/shared/ollama-client.js"></script>
+  <script src="/shared/api-key-modal.js"></script>
+  <script src="/shared/navbar.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

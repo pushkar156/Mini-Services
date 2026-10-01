@@ -1,0 +1,22 @@
+{
+  "name": "ovi-micro-services-hub",
+  "version": "1.0.0",
+  "description": "OVI Hub - Unified Multi-Service Suite with BYOK & Ollama",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "hub": "node server.js",
+    "voice": "npm --prefix VoiceStudio start",
+    "voice:dev": "npm --prefix VoiceStudio run dev",
+    "humanizer": "npm --prefix TextHumanizer start",
+    "ductus": "npm --prefix \"Ductus (FLOWCHART)\" run dev",
+    "ident": "npm --prefix \"Ident - Brand Naming Studio\" run dev",
+    "mediadrop": "npm --prefix MediaDrop run dev",
+    "photonarrator": "npm --prefix PhotoNarrator run dev"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "http-proxy-middleware": "^4.2.0"
+  }
+}

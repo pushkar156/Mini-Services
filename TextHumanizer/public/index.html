@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Text Humanizer — OVI Hub</title>
+  <meta name="description" content="Anti-AI text humanization engine that strips robotic clichés, boosts sentence burstiness, and writes natural prose." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/shared/api-key-modal.css" />
+  <link rel="stylesheet" href="/shared/navbar.css" />
+  <link rel="stylesheet" href="/humanizer/style.css" />
+</head>
+<body class="theme-dark">
+
+  <!-- Ambient Glow Orbs -->
+  <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+  <div class="ambient-glow glow-top-right" aria-hidden="true"></div>
+
+  <!-- Unified Global Navbar -->
+  <ovi-navbar current="humanizer"></ovi-navbar>
+
+  <div class="app-layout">
+    
+    <!-- Service Breadcrumb & Header -->
+    <header class="service-page-header">
+      <div class="service-header-left">
+        <div class="service-badge-pill">
+          <span class="pulse-dot"></span>
+          <span>ANTI-AI REWRITING ENGINE</span>
+        </div>
+        <h1 class="service-main-heading">AI Text Humanizer</h1>
+        <p class="service-main-subheading">Transform artificial, rigid AI text into authentic human writing with high burstiness and zero clichés.</p>
+      </div>
+
+      <!-- Humanizer Presets Toolbar -->
+      <div class="samples-buttons">
+        <button type="button" class="btn-sample" data-humanizer-preset="essay">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+          AI Essay
+        </button>
+        <button type="button" class="btn-sample" data-humanizer-preset="marketing">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Marketing Pitch
+        </button>
+        <button type="button" class="btn-sample" data-humanizer-preset="formal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+          Formal Report
+        </button>
+        <button type="button" class="btn-sample" data-humanizer-preset="coverletter">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 9 9 6 9-6"/></svg>
+          Cover Letter
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Two-Column Grid -->
+    <main class="studio-grid">
+      
+      <!-- Left Box: Original AI-Generated Text -->
+      <section class="card editor-card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            <h3>AI-Generated Text</h3>
+          </div>
+          <div class="editor-actions">
+            <button type="button" id="btnHumanizePaste" class="btn-icon-text" title="Paste text from clipboard">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+              Paste
+            </button>
+            <button type="button" id="btnHumanizeClear" class="btn-icon-text" title="Clear text">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div class="editor-wrapper">
+          <textarea
+            id="humanizeInput"
+            placeholder="Paste ChatGPT, Claude, or AI-generated text here to remove robotic cadence, formulas, and clichés..."
+            maxlength="10000"
+            spellcheck="true"
+          ></textarea>
+        </div>
+
+        <div class="editor-footer">
+          <div class="stats-group">
+            <span id="humanizeCharCount">0</span><span class="stat-max"> / 10,000 chars</span>
+            <span class="stat-separator">&bull;</span>
+            <span id="humanizeWordCount">0 words</span>
+          </div>
+          <div class="cliche-indicator" id="clicheIndicator">
+            <span class="status-dot dot-neutral"></span>
+            <span id="clicheText">Cliché Scanner Ready</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Box: Humanized Result -->
+      <section class="card editor-card humanizer-result-card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <h3>Humanized Result</h3>
+          </div>
+          <div class="editor-actions">
+            <button type="button" id="btnCopyHumanized" class="btn-icon-text" title="Copy humanized text" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            </button>
+            <button type="button" id="btnDownloadHumanized" class="btn-icon-text" title="Download as text file" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Save .txt
+            </button>
+            <!-- Synergy bridge: Send directly to Voice Studio -->
+            <button type="button" id="btnSendToVoice" class="btn-icon-text btn-accent-action" title="Send text directly to Voice Studio to generate speech" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+              Send to Voice Studio &rarr;
+            </button>
+          </div>
+        </div>
+
+        <div class="editor-wrapper">
+          <div id="humanizeOutput" class="humanized-output-view" tabindex="0">
+            <div class="empty-state-prompt">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg>
+              <p>Your natural humanized text will appear here.</p>
+              <span>Select your mode below and click <strong>Humanize Text</strong>.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Humanized Detection & Readability Metrics -->
+        <div class="humanizer-metrics-bar" id="humanizerMetrics" style="display: none;">
+          <div class="metric-chip metric-success">
+            <span class="metric-label">Human Score</span>
+            <strong id="metricHumanScore">97%</strong>
+          </div>
+          <div class="metric-chip">
+            <span class="metric-label">Cadence</span>
+            <strong id="metricCadence">High Burstiness</strong>
+          </div>
+          <div class="metric-chip">
+            <span class="metric-label">Word Count</span>
+            <strong id="metricWordDiff">0 words</strong>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Controls & Action Bar -->
+    <section class="card humanizer-controls-card">
+      <div class="humanizer-controls-grid">
+        
+        <!-- Mode Selector -->
+        <div class="form-group">
+          <label for="humanizeMode">Humanization Mode</label>
+          <select id="humanizeMode" class="form-control">
+            <option value="ultra" selected>1. Ultra-Bypass (High Perplexity &amp; Burstiness)</option>
+            <option value="conversational">2. Conversational &amp; Natural (Warm &amp; Relatable)</option>
+            <option value="academic">3. Academic &amp; Nuanced (Scholarly &amp; Rigorous)</option>
+            <option value="professional">4. Executive &amp; Boardroom (Crisp &amp; Punchy)</option>
+            <option value="creative">5. Creative &amp; Storyteller (Vivid &amp; Expressive)</option>
+          </select>
+        </div>
+
+        <!-- Strength Selector -->
+        <div class="form-group">
+          <label for="humanizeStrength">Rewriting Depth</label>
+          <select id="humanizeStrength" class="form-control">
+            <option value="balanced" selected>Balanced (Standard Naturalization)</option>
+            <option value="light">Light Polish (Keep Original Phrasing)</option>
+            <option value="deep">Deep Reconstruction (Complete Restructure)</option>
+          </select>
+        </div>
+
+        <!-- Audience / Context -->
+        <div class="form-group">
+          <label for="humanizeAudience">Target Audience</label>
+          <select id="humanizeAudience" class="form-control">
+            <option value="general" selected>General Public</option>
+            <option value="academic">College / Academia</option>
+            <option value="business">Business / Corporate</option>
+            <option value="blog">Blog &amp; Social Media</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="humanizer-action-row">
+        <button type="button" id="btnHumanize" class="btn-primary">
+          <span class="btn-spinner" id="humanizeSpinner" style="display: none;"></span>
+          <svg id="humanizeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 2 4 4-14 14H4v-4L18 2z"/><path d="m14.5 5.5 4 4"/></svg>
+          <span id="humanizeBtnText">Humanize Text</span>
+        </button>
+        
+        <div id="humanizeStatus" class="status-msg">
+          Ready to convert AI text into natural human writing.
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" role="alert" aria-live="assertive" style="display: none;"></div>
+
+  <!-- Shared Scripts -->
+  <script src="/shared/api-key-manager.js"></script>
+  <script src="/shared/ollama-client.js"></script>
+  <script src="/shared/api-key-modal.js"></script>
+  <script src="/shared/navbar.js"></script>
+  <script src="/humanizer/app.js"></script>
+</body>
+</html>
