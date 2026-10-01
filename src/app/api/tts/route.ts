@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { Mp3Encoder } from "@breezystack/lamejs";
 
-function convertWavToMp3(wavBuffer: Buffer, bitrate = 128): Buffer | null {
+function convertWavToMp3(wavBuffer: any, bitrate = 128): Buffer | null {
   try {
     if (!wavBuffer || wavBuffer.length < 44) return null;
     let dataOffset = 44;
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
     if (parts) {
       for (const part of parts) {
         if (part.inlineData && part.inlineData.mimeType?.startsWith("audio/")) {
-          base64Audio = part.inlineData.data;
+          base64Audio = part.inlineData.data || "";
           break;
         }
       }
@@ -110,8 +110,8 @@ export async function POST(req: NextRequest) {
       throw new Error("Gemini response did not contain inline audio data.");
     }
 
-    const rawWavBuffer = Buffer.from(base64Audio, "base64");
-    let finalAudioBuffer = rawWavBuffer;
+    const rawWavBuffer: Buffer = Buffer.from(base64Audio, "base64");
+    let finalAudioBuffer: Buffer = rawWavBuffer;
     let outFormat = "wav";
 
     if (format === "mp3") {
@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return new NextResponse(finalAudioBuffer, {
+    return new NextResponse(new Uint8Array(finalAudioBuffer), {
       status: 200,
       headers: {
         "Content-Type": outFormat === "mp3" ? "audio/mp3" : "audio/wav",

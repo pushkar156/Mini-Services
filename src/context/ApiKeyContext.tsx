@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 interface ApiKeyContextType {
+  apiKey: string;
   geminiKey: string;
   provider: "gemini" | "ollama";
   ollamaEndpoint: string;
@@ -133,6 +134,7 @@ export function ApiKeyProvider({ children }: { children: ReactNode }) {
   return (
     <ApiKeyContext.Provider
       value={{
+        apiKey: geminiKey,
         geminiKey,
         provider,
         ollamaEndpoint,
