@@ -230,7 +230,7 @@ export default function AtelierHubPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between mt-3 px-1 text-[#7A7E85] font-mono text-[10px] gap-2">
-          <span>OVI PLATFORM ARCHITECTURE // CLIENT-FIRST MONOREPO MATRIX</span>
+          <span>OVI ATELIER PLATFORM // CLIENT-FIRST MONOREPO MATRIX</span>
           <span>STITCH UI SPEC: 13115693836351847259 // VERIFIED</span>
         </div>
       </footer>

@@ -39,7 +39,7 @@ export default function Navbar({ current }: NavbarProps) {
             href="/"
             className="font-sans text-sm font-bold tracking-tight text-[#e3e2e5] uppercase flex items-center gap-2 group"
           >
-            <span>OVI</span>
+            <span>OVI ATELIER</span>
             <span className="w-1.5 h-1.5 bg-[#9E988E] inline-block"></span>
           </Link>
 
@@ -101,9 +101,9 @@ export default function Navbar({ current }: NavbarProps) {
           <div className="pl-2 border-l border-white/[0.08]">
             <div
               className="w-6 h-6 bg-[#292a2c] border border-white/[0.1] flex items-center justify-center text-[#cdc6bb] font-mono text-[10px] font-bold"
-              title="Atelier Monogram"
+              title="OVI Atelier Monogram"
             >
-              VI
+              OA
             </div>
           </div>
 

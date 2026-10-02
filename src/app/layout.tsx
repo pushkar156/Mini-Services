@@ -42,7 +42,7 @@ const italiana = Italiana({
 });
 
 export const metadata: Metadata = {
-  title: "OVI Hub — Unified Creative Atelier",
+  title: "OVI Atelier — Unified Creative Suite",
   description: "Focused suite of architectural micro-services for voice, humanizer, flowcharts, branding, media extraction, and photography.",
 };
 

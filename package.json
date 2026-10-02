@@ -1,7 +1,7 @@
 {
-  "name": "ovi-micro-services-hub",
+  "name": "ovi-atelier",
   "version": "1.0.0",
-  "description": "OVI Hub - Unified Multi-Service Suite with BYOK & Ollama",
+  "description": "OVI Atelier - Unified Creative Suite with BYOK & Ollama",
   "private": true,
   "type": "module",
   "scripts": {
