@@ -7,6 +7,7 @@ import { useApiKey } from "@/context/ApiKeyContext";
 import { useAuth } from "@/context/AuthContext";
 import { Settings, Clock, User as UserIcon, LogOut, ChevronDown } from "lucide-react";
 import { HistoryDrawer } from "./HistoryDrawer";
+import OviLogo from "./OviLogo";
 
 interface NavbarProps {
   current?: string;
@@ -43,10 +44,13 @@ export default function Navbar({ current }: NavbarProps) {
           <div className="flex items-center space-x-6 sm:space-x-8">
             <Link
               href="/"
-              className="font-sans text-sm font-bold tracking-tight text-[#e3e2e5] uppercase flex items-center gap-2 group"
+              className="font-sans text-sm font-bold tracking-tight text-[#e3e2e5] uppercase flex items-center gap-2.5 group"
             >
-              <span>OVI ATELIER</span>
-              <span className="w-1.5 h-1.5 bg-[#9E988E] inline-block"></span>
+              <OviLogo size={25} />
+              <div className="flex items-center gap-1.5">
+                <span>OVI ATELIER</span>
+                <span className="w-1.5 h-1.5 bg-[#9E988E] inline-block"></span>
+              </div>
             </Link>
 
             {/* Segmented Inline Navigation Rack */}
@@ -184,11 +188,8 @@ export default function Navbar({ current }: NavbarProps) {
 
             {/* Monogram Badge */}
             <div className="pl-1 sm:pl-2 border-l border-white/[0.08] hidden sm:block">
-              <div
-                className="w-6 h-6 bg-[#292a2c] border border-white/[0.1] flex items-center justify-center text-[#cdc6bb] font-mono text-[10px] font-bold"
-                title="OVI Atelier Monogram"
-              >
-                OA
+              <div title="OVI Atelier Hallmark">
+                <OviLogo size={22} />
               </div>
             </div>
 
