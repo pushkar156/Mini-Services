@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: /users/{userId}/history/{docId}
+    // Document ID: Auto-generated string
+    // Fields:
+    //   - userId: string (required, must match authenticated request.auth.uid)
+    //   - service: string (required, one of ['voice', 'humanizer', 'ductus', 'ident', 'mediadrop', 'photonarrator'])
+    //   - title: string (required, 1-100 characters)
+    //   - summary: string (required, 0-500 characters)
+    //   - payload: map (required, arbitrary craft payload)
+    //   - createdAt: timestamp (required, recent or server timestamp)
+    //
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidService(service) {
+      return service in ['voice', 'humanizer', 'ductus', 'ident', 'mediadrop', 'photonarrator'];
+    }
+
+    function isValidHistoryItem(userId, data) {
+      return data.keys().hasAll(['userId', 'service', 'title', 'summary', 'payload']) &&
+             data.keys().hasOnly(['userId', 'service', 'title', 'summary', 'payload', 'createdAt']) &&
+             data.userId == userId &&
+             data.userId == request.auth.uid &&
+             isValidService(data.service) &&
+             data.title is string && data.title.size() > 0 && data.title.size() <= 100 &&
+             data.summary is string && data.summary.size() <= 500 &&
+             data.payload is map;
+    }
+
+    // Default deny for unmatched collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User-scoped History Archives
+    match /users/{userId}/history/{docId} {
+      // User can read and delete their own history entries
+      allow read, delete: if isOwner(userId);
+
+      // User can create new history records with strict validation
+      allow create: if isOwner(userId) && isValidHistoryItem(userId, request.resource.data);
+
+      // History logs are immutable; updates are forbidden
+      allow update: if false;
+    }
+  }
+}

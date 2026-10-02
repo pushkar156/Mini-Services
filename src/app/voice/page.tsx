@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { useApiKey } from "@/context/ApiKeyContext";
+import { useAuth } from "@/context/AuthContext";
+import { saveHistoryItem } from "@/lib/historyService";
 import {
   Play,
   Pause,
@@ -75,6 +77,7 @@ const PRESETS = [
 
 export default function VoiceStudioPage() {
   const { geminiKey, openModal } = useApiKey();
+  const { user } = useAuth();
 
   const [activePreset, setActivePreset] = useState("documentary");
   const [selectedVoice, setSelectedVoice] = useState("Fenrir");
@@ -144,6 +147,22 @@ export default function VoiceStudioPage() {
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       setAudioUrl(url);
+
+      if (user && scriptText) {
+        saveHistoryItem(
+          user.uid,
+          "voice",
+          `Voice: ${selectedVoice} (${wordCount} words)`,
+          `Synthesized audio at ${speechRate}% rate — "${scriptText.slice(0, 60)}..."`,
+          {
+            voice: selectedVoice,
+            speechRate,
+            pitchBias,
+            script: scriptText,
+            wordCount,
+          }
+        ).catch((err) => console.error("Voice history save failed:", err));
+      }
 
       if (audioRef.current) {
         audioRef.current.src = url;

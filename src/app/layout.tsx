@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Syne, Space_Grotesk, JetBrains_Mono, Newsreader, Italiana } from "next/font/google";
 import "./globals.css";
 import { ApiKeyProvider } from "@/context/ApiKeyContext";
+import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import SettingsModal from "@/components/SettingsModal";
+import { AuthModal } from "@/components/AuthModal";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -57,11 +59,14 @@ export default function RootLayout({
         className={`${syne.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${newsreader.variable} ${italiana.variable} bg-[#0b0c0e] text-[#e3e2e5] min-h-screen flex flex-col font-sans selection:bg-[#9E988E] selection:text-[#0b0c0e]`}
       >
         <ApiKeyProvider>
-          <Navbar />
-          <div className="pt-12 flex-1 flex flex-col">
-            {children}
-          </div>
-          <SettingsModal />
+          <AuthProvider>
+            <Navbar />
+            <div className="pt-12 flex-1 flex flex-col">
+              {children}
+            </div>
+            <SettingsModal />
+            <AuthModal />
+          </AuthProvider>
         </ApiKeyProvider>
       </body>
     </html>

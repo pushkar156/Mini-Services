@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { useApiKey } from "@/context/ApiKeyContext";
+import { useAuth } from "@/context/AuthContext";
+import { saveHistoryItem } from "@/lib/historyService";
 import {
   Sparkles,
   Bookmark,
@@ -60,6 +62,7 @@ const INITIAL_BRANDS: BrandCard[] = [
 
 export default function IdentPage() {
   const { apiKey } = useApiKey();
+  const { user } = useAuth();
 
   const [keywords, setKeywords] = useState("Tactile computing, audio hardware, quiet luxury");
   const [archetype, setArchetype] = useState("Minimalist Hardware");
@@ -104,6 +107,17 @@ export default function IdentPage() {
       }
 
       setBrands(data.names);
+
+      if (user && data.names && data.names.length > 0) {
+        const topName = data.names[0].name;
+        saveHistoryItem(
+          user.uid,
+          "ident",
+          `Lexicon: ${topName} (${data.names.length} concepts)`,
+          `Synthesized for "${archetype}" — ${keywords}`,
+          { names: data.names, archetype, constraint, keywords }
+        ).catch((err) => console.error("History save failed:", err));
+      }
     } catch (err: any) {
       alert(err.message || "Synthesis error");
     } finally {

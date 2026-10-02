@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useApiKey } from "@/context/ApiKeyContext";
+import { useAuth } from "@/context/AuthContext";
+import { saveHistoryItem } from "@/lib/historyService";
 import {
   Play,
   RotateCcw,
@@ -36,6 +38,7 @@ const INITIAL_MERMAID = `graph TD
 
 export default function DuctusPage() {
   const { apiKey } = useApiKey();
+  const { user } = useAuth();
 
   // State
   const [diagramTitle, setDiagramTitle] = useState("SYS_KERNEL_ORCHESTRATION.V2");
@@ -161,6 +164,21 @@ export default function DuctusPage() {
 
       setMermaidCode(data.mermaidCode);
       setDiagramTitle(data.title.toUpperCase().replace(/\s+/g, "_") + ".V1");
+
+      if (user && data.mermaidCode) {
+        saveHistoryItem(
+          user.uid,
+          "ductus",
+          `Diagram: ${data.title || promptTopic}`,
+          `Architectural Blueprint (${data.mermaidCode.split("\n").length} nodes/edges)`,
+          {
+            title: data.title || promptTopic,
+            mermaidCode: data.mermaidCode,
+            promptTopic,
+            details,
+          }
+        ).catch((err) => console.error("Ductus history save failed:", err));
+      }
       setScale(1);
       setPan({ x: 0, y: 0 });
     } catch (err: any) {

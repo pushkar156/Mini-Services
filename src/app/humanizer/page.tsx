@@ -4,6 +4,8 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApiKey } from "@/context/ApiKeyContext";
+import { useAuth } from "@/context/AuthContext";
+import { saveHistoryItem } from "@/lib/historyService";
 import {
   Copy,
   Check,
@@ -33,6 +35,7 @@ const KNOWN_CLICHES = [
 export default function HumanizerPage() {
   const router = useRouter();
   const { apiKey } = useApiKey();
+  const { user } = useAuth();
 
   const [mode, setMode] = useState<"essay" | "correspondence" | "critique" | "executive">("essay");
   const [strength, setStrength] = useState<"light" | "balanced" | "deep">("balanced");
@@ -91,6 +94,22 @@ By breaking machine symmetry and varying syntactic weights, the text regains its
       }
 
       setHumanizedText(data.humanizedText);
+
+      if (user && data.humanizedText) {
+        saveHistoryItem(
+          user.uid,
+          "humanizer",
+          `Prose: ${data.humanizedText.slice(0, 50)}...`,
+          `Tone: ${mode} (${strength}) — Cadence aligned`,
+          {
+            original: inputText,
+            humanized: data.humanizedText,
+            mode,
+            strength,
+            stats: data.stats,
+          }
+        ).catch((err) => console.error("History save failed:", err));
+      }
       const elapsed = Date.now() - startTime;
       setStats({
         burstiness: data.stats?.burstiness || "+34% Variance",

@@ -54,6 +54,7 @@ Thumbs.db
 *.swo
 .claude/
 .system_generated/
+.agents/
 
 
 phases.md
