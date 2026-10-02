@@ -1,6 +1,0 @@
-{
-  "name": "Gemini Voice Studio",
-  "description": "Turn text into natural AI speech powered by Google Gemini TTS with voice styles, failover keys, and dialogue mode.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

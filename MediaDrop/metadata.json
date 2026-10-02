@@ -1,6 +1,0 @@
-{
-  "name": "MediaDrop",
-  "description": "A clean, local Flask web application to extract and download publicly available Instagram and Pinterest images and videos.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

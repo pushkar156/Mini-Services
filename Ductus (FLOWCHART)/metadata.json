@@ -1,5 +1,0 @@
-{
-  "name": "Mermaid Flowchart Generator",
-  "description": "An application that converts user-provided topics or descriptions into clear, logically ordered flowcharts using Mermaid syntax, powered by the Gemini API.",
-  "requestFramePermissions": []
-}
