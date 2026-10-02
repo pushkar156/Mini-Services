@@ -60,3 +60,15 @@ phases.md
 /stitch-design
 AGENTS.md
 CLAUDE.md
+
+# Legacy Folders and Files
+Ductus (FLOWCHART)/
+Ident - Brand Naming Studio/
+MediaDrop/
+PhotoNarrator/
+TextHumanizer/
+VoiceStudio/
+app.js
+index.html
+server.js
+style.css
