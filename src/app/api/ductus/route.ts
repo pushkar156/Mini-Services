@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 
-const CANDIDATE_MODELS = [
-  process.env.GEMINI_TEXT_MODEL || "gemini-2.5-flash",
-  "gemini-2.0-flash",
-  "gemini-1.5-flash",
-];
+const CANDIDATE_MODELS = Array.from(
+  new Set(
+    [
+      process.env.GEMINI_TEXT_MODEL,
+      "gemini-3.8-flash",
+      "gemini-3.5-flash",
+      "gemini-3.5-flash-lite",
+      "gemini-2.5-flash",
+    ].filter(Boolean) as string[]
+  )
+);
 
 const PROMPT_TEMPLATE = `
 You are an expert systems architect and diagram engineer.

@@ -133,6 +133,10 @@ export default function SettingsModal() {
                   aistudio.google.com
                 </a>
               </p>
+              <div className="mt-2.5 flex items-center gap-2 text-[11px] font-mono text-[#9E988E] bg-white/[0.03] border border-white/5 px-2.5 py-1.5 rounded-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Active Model Stack: <strong>Gemini 3.8 Flash</strong> (with 3.5 &amp; 3.8 TTS failover)</span>
+              </div>
             </div>
 
             <div className="flex gap-2 pt-2">

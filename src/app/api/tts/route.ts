@@ -81,18 +81,43 @@ export async function POST(req: NextRequest) {
       ? dialogue.map((d: any) => `${d.speaker || d.voice || "Speaker"}: ${d.text}`).join("\n")
       : text.trim();
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: promptText,
-      config: {
-        responseModalities: ["AUDIO"],
-        speechConfig,
-      },
-    });
+    const CANDIDATE_TTS_MODELS = Array.from(
+      new Set(
+        [
+          process.env.GEMINI_TTS_MODEL,
+          "gemini-3.8-flash-tts",
+          "gemini-3.8-flash-lite-tts",
+          "gemini-2.5-flash",
+          "gemini-3.8-flash",
+        ].filter(Boolean) as string[]
+      )
+    );
 
-    const candidates = response.candidates;
+    let response: any = null;
+    let ttsError: any = null;
+
+    for (const model of CANDIDATE_TTS_MODELS) {
+      try {
+        response = await ai.models.generateContent({
+          model,
+          contents: promptText,
+          config: {
+            responseModalities: ["AUDIO"],
+            speechConfig,
+          },
+        });
+
+        if (response?.candidates?.[0]?.content?.parts) {
+          break;
+        }
+      } catch (err: any) {
+        ttsError = err;
+      }
+    }
+
+    const candidates = response?.candidates;
     if (!candidates || candidates.length === 0) {
-      throw new Error("No speech candidates returned by Gemini TTS.");
+      throw new Error(ttsError?.message || "No speech candidates returned by Gemini TTS.");
     }
 
     const parts = candidates[0].content?.parts;
