@@ -137,27 +137,29 @@ export default function MediaDropPage() {
             Direct high-fidelity extraction for Instagram reels, carousels, and Pinterest visual pins.
           </p>
 
-          {/* URL Extraction Capsule (64px Tall Pill) */}
+          {/* URL Extraction Capsule */}
           <div className="w-full max-w-3xl mt-6">
-            <div className="relative flex items-center h-16 w-full bg-[#0D0E10] border border-[#4A463F]/40 rounded-xl px-3 transition-all duration-200 focus-within:border-[#CDC6BB] shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
-              {/* Source Auto-Detect Badge */}
-              <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#1B1C1E] border border-[#4A463F]/30 rounded-lg mr-3 select-none">
-                <Camera className="w-4 h-4 text-[#CDC6BB]" />
-                <span className="font-mono text-[11px] text-[#EDEAE5] font-medium uppercase">
-                  {detectedPlatform}
-                </span>
+            <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center min-h-[56px] sm:h-16 w-full bg-[#0D0E10] border border-[#4A463F]/40 rounded-xl p-2 sm:px-3 gap-2 transition-all duration-200 focus-within:border-[#CDC6BB] shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+              {/* Source Auto-Detect Badge & Input Group */}
+              <div className="flex items-center flex-1">
+                <div className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-[#1B1C1E] border border-[#4A463F]/30 rounded-lg mr-2 select-none shrink-0">
+                  <Camera className="w-4 h-4 text-[#CDC6BB]" />
+                  <span className="font-mono text-[11px] text-[#EDEAE5] font-medium uppercase">
+                    {detectedPlatform}
+                  </span>
+                </div>
+
+                {/* Input Element */}
+                <input
+                  value={inputUrl}
+                  onChange={(e) => setInputUrl(e.target.value)}
+                  placeholder="Paste Instagram or Pinterest URL..."
+                  className="flex-1 bg-transparent border-0 text-[#EDEAE5] placeholder-[#969087] font-mono text-xs md:text-sm focus:outline-none px-1 min-w-0"
+                />
               </div>
 
-              {/* Input Element */}
-              <input
-                value={inputUrl}
-                onChange={(e) => setInputUrl(e.target.value)}
-                placeholder="Paste raw Instagram post, reel, or Pinterest pin URL..."
-                className="flex-1 bg-transparent border-0 text-[#EDEAE5] placeholder-[#969087] font-mono text-xs md:text-sm focus:outline-none px-1"
-              />
-
               {/* Action Buttons */}
-              <div className="flex items-center space-x-2 pl-2">
+              <div className="flex items-center space-x-2 justify-end pt-1 sm:pt-0 sm:pl-2 border-t sm:border-t-0 border-[#4A463F]/20">
                 <button
                   onClick={handlePaste}
                   className="px-3 h-10 border border-[#4A463F]/40 hover:border-[#969087] text-[#969087] hover:text-[#EDEAE5] font-mono text-[11px] uppercase rounded bg-[#1F2022] transition-all flex items-center space-x-1.5"

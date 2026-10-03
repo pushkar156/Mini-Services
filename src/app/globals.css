@@ -10,13 +10,102 @@
     --foreground: 227 226 229;
   }
 
-  body {
+  html.dark body {
     background-color: #0b0c0e;
     color: #e3e2e5;
+  }
+
+  html:not(.dark) body,
+  html.light body {
+    background-color: #f7f6f3;
+    color: #1a1a1c;
+  }
+
+  body {
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
+}
+
+/* =========================================================================
+   Light Theme Architectural Mappings (Alabaster / Linen / Charcoal)
+   ========================================================================= */
+html:not(.dark) .bg-\[\#0b0c0e\],
+html:not(.dark) .bg-\[\#0B0C0E\],
+html:not(.dark) .bg-\[\#0d0e10\],
+html:not(.dark) .bg-\[\#0D0E10\],
+html:not(.dark) .bg-\[\#121315\],
+html:not(.dark) .bg-\[\#121418\] {
+  background-color: #ffffff !important;
+}
+
+html:not(.dark) .bg-\[\#121418\]\/85 {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+}
+
+html:not(.dark) .bg-\[\#1b1c1e\],
+html:not(.dark) .bg-\[\#1B1C1E\],
+html:not(.dark) .bg-\[\#1f2022\],
+html:not(.dark) .bg-\[\#1F2022\],
+html:not(.dark) .bg-\[\#17191E\],
+html:not(.dark) .bg-\[\#111215\] {
+  background-color: #f1efea !important;
+}
+
+html:not(.dark) .bg-\[\#292a2c\],
+html:not(.dark) .bg-\[\#292A2C\],
+html:not(.dark) .bg-\[\#252629\],
+html:not(.dark) .bg-\[\#343537\] {
+  background-color: #e4e0d7 !important;
+}
+
+html:not(.dark) .text-\[\#e3e2e5\],
+html:not(.dark) .text-\[\#EDEAE5\] {
+  color: #18191c !important;
+}
+
+html:not(.dark) .text-\[\#969087\],
+html:not(.dark) .text-\[\#7A7E85\] {
+  color: #615e57 !important;
+}
+
+html:not(.dark) .text-\[\#cdc6bb\],
+html:not(.dark) .text-\[\#CDC6BB\],
+html:not(.dark) .text-\[\#CDC6BC\] {
+  color: #3b3934 !important;
+}
+
+html:not(.dark) .border-white\/\[0\.07\],
+html:not(.dark) .border-white\/\[0\.08\],
+html:not(.dark) .border-white\/\[0\.06\],
+html:not(.dark) .border-white\/10,
+html:not(.dark) .border-white\/20,
+html:not(.dark) .border-\[\#4A463F\]\/30,
+html:not(.dark) .border-\[\#4A463F\]\/20,
+html:not(.dark) .border-\[\#4A463F\]\/40 {
+  border-color: rgba(0, 0, 0, 0.09) !important;
+}
+
+html:not(.dark) .hairline-border,
+html:not(.dark) .hairline-b,
+html:not(.dark) .hairline-t,
+html:not(.dark) .hairline-l,
+html:not(.dark) .hairline-r {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html:not(.dark) ::-webkit-scrollbar-track {
+  background: #f7f6f3;
+}
+
+html:not(.dark) ::-webkit-scrollbar-thumb {
+  background: #d8d4cc;
+}
+
+html:not(.dark) ::-webkit-scrollbar-thumb:hover {
+  background: #bcbaa0;
 }
 
 .material-symbols-outlined {

@@ -26,7 +26,7 @@ export const OviLogo: React.FC<OviLogoProps> = ({ size = 26, className = "" }) =
           width="32"
           height="32"
           rx="7"
-          className="fill-[#16181D] stroke-white/10 group-hover/logo:stroke-[#CDC6BB]/40 transition-colors"
+          className="dark:fill-[#16181D] fill-[#EFECE6] dark:stroke-white/10 stroke-black/10 group-hover/logo:stroke-[#CDC6BB]/60 transition-colors"
           strokeWidth="1"
         />
 
@@ -35,7 +35,7 @@ export const OviLogo: React.FC<OviLogoProps> = ({ size = 26, className = "" }) =
           cx="16"
           cy="16"
           r="10.5"
-          className="stroke-[#CDC6BB]/20 group-hover/logo:stroke-[#CDC6BB]/35 transition-colors"
+          className="dark:stroke-[#CDC6BB]/20 stroke-[#7A7E85]/30 group-hover/logo:stroke-[#CDC6BB]/50 transition-colors"
           strokeWidth="0.8"
           strokeDasharray="2 2"
         />
@@ -45,14 +45,14 @@ export const OviLogo: React.FC<OviLogoProps> = ({ size = 26, className = "" }) =
           cx="16"
           cy="16"
           r="7"
-          className="stroke-[#EDEAE5] group-hover/logo:stroke-white transition-colors"
+          className="dark:stroke-[#EDEAE5] stroke-[#18191C] group-hover/logo:stroke-[#C89B6D] transition-colors"
           strokeWidth="1.4"
         />
 
         {/* The 'V' Vertex Anchor */}
         <path
           d="M10.5 12L16 21L21.5 12"
-          className="stroke-[#CDC6BB] group-hover/logo:stroke-[#EDEAE5] transition-colors"
+          className="dark:stroke-[#CDC6BB] stroke-[#4A463F] group-hover/logo:stroke-[#18191C] transition-colors"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -64,7 +64,7 @@ export const OviLogo: React.FC<OviLogoProps> = ({ size = 26, className = "" }) =
           y1="8"
           x2="16"
           y2="16"
-          className="stroke-[#9E988E] group-hover/logo:stroke-[#CDC6BB] transition-colors"
+          className="dark:stroke-[#9E988E] stroke-[#6E6A63] transition-colors"
           strokeWidth="1.3"
           strokeLinecap="round"
         />

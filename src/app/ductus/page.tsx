@@ -311,10 +311,10 @@ export default function DuctusPage() {
         </div>
       </div>
 
-      {/* Main Three-Panel Studio Layout */}
-      <main className="flex-1 flex overflow-hidden relative">
-        {/* LEFT SIDEBAR: Specification Prompt & Code Input (300px) */}
-        <aside className="w-[300px] flex-shrink-0 bg-[#1B1C1E] border-r border-[#4A463F]/30 flex flex-col justify-between z-20">
+      {/* Main Studio Layout (Stacked on mobile/tablet, side-by-side on desktop) */}
+      <main className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        {/* SPECIFICATION PANEL */}
+        <aside className="w-full md:w-[320px] shrink-0 bg-[#1B1C1E] border-b md:border-b-0 md:border-r border-[#4A463F]/30 flex flex-col justify-between z-20 max-h-[42vh] md:max-h-none overflow-y-auto">
           <div className="flex flex-col h-full overflow-hidden">
             {/* Logic Input Header */}
             <div className="h-8 border-b border-[#4A463F]/30 px-3 flex items-center justify-between bg-[#0D0E10]">

@@ -3,6 +3,7 @@ import { Syne, Space_Grotesk, JetBrains_Mono, Newsreader, Italiana } from "next/
 import "./globals.css";
 import { ApiKeyProvider } from "@/context/ApiKeyContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import Navbar from "@/components/Navbar";
 import SettingsModal from "@/components/SettingsModal";
 import { AuthModal } from "@/components/AuthModal";
@@ -63,16 +64,18 @@ export default function RootLayout({
       <body
         className={`${syne.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${newsreader.variable} ${italiana.variable} bg-[#0b0c0e] text-[#e3e2e5] min-h-screen flex flex-col font-sans selection:bg-[#9E988E] selection:text-[#0b0c0e]`}
       >
-        <ApiKeyProvider>
-          <AuthProvider>
-            <Navbar />
-            <div className="pt-12 flex-1 flex flex-col">
-              {children}
-            </div>
-            <SettingsModal />
-            <AuthModal />
-          </AuthProvider>
-        </ApiKeyProvider>
+        <ThemeProvider>
+          <ApiKeyProvider>
+            <AuthProvider>
+              <Navbar />
+              <div className="pt-12 flex-1 flex flex-col">
+                {children}
+              </div>
+              <SettingsModal />
+              <AuthModal />
+            </AuthProvider>
+          </ApiKeyProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

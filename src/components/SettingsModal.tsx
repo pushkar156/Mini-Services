@@ -65,8 +65,8 @@ export default function SettingsModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="relative w-full max-w-lg bg-[#121418] border border-white/10 rounded-sm shadow-2xl p-6 sm:p-8 text-[#e3e2e5]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm">
+      <div className="relative w-full max-w-lg bg-[#121418] border border-white/10 rounded-sm shadow-2xl p-5 sm:p-8 text-[#e3e2e5] max-h-[90vh] overflow-y-auto">
         
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/10">
