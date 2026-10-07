@@ -1,17 +1,6 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
-
-const CANDIDATE_MODELS = Array.from(
-  new Set(
-    [
-      process.env.GEMINI_TEXT_MODEL,
-      "gemini-3.8-flash",
-      "gemini-3.5-flash",
-      "gemini-3.5-flash-lite",
-      "gemini-2.5-flash",
-    ].filter(Boolean) as string[]
-  )
-);
+import { CANDIDATE_TEXT_MODELS, getConfiguredKeys } from "@/lib/gemini";
 
 const AI_CLICHES = [
   "delve", "testament", "tapestry", "in conclusion", "furthermore",
@@ -34,28 +23,10 @@ Style: Straight to the point with boardroom-ready economy of language. Eliminate
 Style: Dramatically vary sentence length—interleave short 3-word punchy sentences with longer flowing clauses. Completely eradicate AI statistical regularity.`
 };
 
-function getConfiguredKeys(clientApiKey?: string): string[] {
-  const candidates = [
-    clientApiKey,
-    process.env.GEMINI_API_KEY_1,
-    process.env.GEMINI_API_KEY_2,
-    process.env.GEMINI_API_KEY_3,
-    process.env.GEMINI_API_KEY,
-  ];
-
-  return candidates.filter((k): k is string => {
-    if (!k || typeof k !== "string") return false;
-    const trimmed = k.trim();
-    return trimmed.length > 5 && !trimmed.includes("your_first_key_here") && !trimmed.includes("MY_GEMINI_API_KEY");
-  });
-}
-
 function cleanOutput(raw: string): string {
   if (!raw) return "";
   let cleaned = raw.trim();
-  if (cleaned.startsWith("```") && cleaned.endsWith("```")) {
-    cleaned = cleaned.replace(/^```[a-zA-Z]*\n?/, "").replace(/\n?```$/, "");
-  }
+  cleaned = cleaned.replace(/^```[a-zA-Z]*\s*/i, "").replace(/\s*```$/i, "");
   return cleaned.trim();
 }
 
@@ -63,12 +34,13 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { text, mode = "essay", strength = "balanced", apiKey: clientApiKey } = body;
+    const headerApiKey = req.headers.get("x-gemini-api-key") || undefined;
 
     if (!text || typeof text !== "string" || !text.trim()) {
       return NextResponse.json({ error: "No text provided to humanize." }, { status: 400 });
     }
 
-    const availableKeys = getConfiguredKeys(clientApiKey);
+    const availableKeys = getConfiguredKeys(clientApiKey, headerApiKey);
     if (availableKeys.length === 0) {
       return NextResponse.json(
         { error: "No Gemini API key available. Please provide an API key in the top bar settings." },
@@ -111,7 +83,7 @@ ${text}
     for (const key of availableKeys) {
       const ai = new GoogleGenAI({ apiKey: key });
 
-      for (const model of CANDIDATE_MODELS) {
+      for (const model of CANDIDATE_TEXT_MODELS) {
         try {
           const response = await ai.models.generateContent({
             model,
@@ -125,7 +97,6 @@ ${text}
           }
         } catch (err: any) {
           lastError = err;
-          // Continue to next model
         }
       }
 

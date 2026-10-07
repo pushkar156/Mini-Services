@@ -1,33 +1,6 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
-
-const CANDIDATE_MODELS = Array.from(
-  new Set(
-    [
-      process.env.GEMINI_TEXT_MODEL,
-      "gemini-3.8-flash",
-      "gemini-3.5-flash",
-      "gemini-3.5-flash-lite",
-      "gemini-2.5-flash",
-    ].filter(Boolean) as string[]
-  )
-);
-
-function getConfiguredKeys(clientApiKey?: string): string[] {
-  const candidates = [
-    clientApiKey,
-    process.env.GEMINI_API_KEY_1,
-    process.env.GEMINI_API_KEY_2,
-    process.env.GEMINI_API_KEY_3,
-    process.env.GEMINI_API_KEY,
-  ];
-
-  return candidates.filter((k): k is string => {
-    if (!k || typeof k !== "string") return false;
-    const trimmed = k.trim();
-    return trimmed.length > 5 && !trimmed.includes("your_first_key_here") && !trimmed.includes("MY_GEMINI_API_KEY");
-  });
-}
+import { CANDIDATE_TEXT_MODELS, getConfiguredKeys, parseJsonResponse } from "@/lib/gemini";
 
 export async function POST(req: Request) {
   try {
@@ -39,11 +12,13 @@ export async function POST(req: Request) {
       apiKey: clientApiKey,
     } = body;
 
+    const headerApiKey = req.headers.get("x-gemini-api-key") || undefined;
+
     if (!keywords || typeof keywords !== "string" || !keywords.trim()) {
       return NextResponse.json({ error: "Please enter industry essence or keywords." }, { status: 400 });
     }
 
-    const availableKeys = getConfiguredKeys(clientApiKey);
+    const availableKeys = getConfiguredKeys(clientApiKey, headerApiKey);
     if (availableKeys.length === 0) {
       return NextResponse.json(
         { error: "No Gemini API key available. Please configure your API key in the top bar settings." },
@@ -82,7 +57,7 @@ Do NOT include markdown backticks (\`\`\`) or any conversational text. Return ON
     for (const key of availableKeys) {
       const ai = new GoogleGenAI({ apiKey: key });
 
-      for (const model of CANDIDATE_MODELS) {
+      for (const model of CANDIDATE_TEXT_MODELS) {
         try {
           const response = await ai.models.generateContent({
             model,
@@ -90,11 +65,7 @@ Do NOT include markdown backticks (\`\`\`) or any conversational text. Return ON
           });
 
           if (response && response.text) {
-            let cleaned = response.text.trim();
-            if (cleaned.startsWith("```") && cleaned.endsWith("```")) {
-              cleaned = cleaned.replace(/^```[a-zA-Z]*\n?/, "").replace(/\n?```$/, "").trim();
-            }
-            const parsed = JSON.parse(cleaned);
+            const parsed = parseJsonResponse<any[]>(response.text);
             if (Array.isArray(parsed) && parsed.length > 0) {
               brandNames = parsed;
               break;

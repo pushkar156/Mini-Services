@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { Mp3Encoder } from "@breezystack/lamejs";
+import { CANDIDATE_TTS_MODELS, getConfiguredKeys } from "@/lib/gemini";
 
 function convertWavToMp3(wavBuffer: any, bitrate = 128): Buffer | null {
   try {
@@ -36,10 +37,12 @@ function convertWavToMp3(wavBuffer: any, bitrate = 128): Buffer | null {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { text, voice = "Puck", dialogue, format = "mp3", speed = 1.0 } = body;
-    const clientApiKey = req.headers.get("x-gemini-api-key") || process.env.GEMINI_API_KEY || "";
+    const { text, voice = "Puck", dialogue, format = "mp3", speed = 1.0, apiKey: bodyApiKey, geminiKey: bodyGeminiKey } = body;
+    const headerApiKey = req.headers.get("x-gemini-api-key") || undefined;
+    const clientKey = bodyApiKey || bodyGeminiKey || headerApiKey;
 
-    if (!clientApiKey) {
+    const availableKeys = getConfiguredKeys(clientKey);
+    if (availableKeys.length === 0) {
       return NextResponse.json(
         { success: false, error: "Please configure your Gemini API Key in Settings (top right)." },
         { status: 401 }
@@ -53,7 +56,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const ai = new GoogleGenAI({ apiKey: clientApiKey.trim() });
     const isMultiSpeaker = Array.isArray(dialogue) && dialogue.length > 1;
 
     let speechConfig: any;
@@ -81,37 +83,33 @@ export async function POST(req: NextRequest) {
       ? dialogue.map((d: any) => `${d.speaker || d.voice || "Speaker"}: ${d.text}`).join("\n")
       : text.trim();
 
-    const CANDIDATE_TTS_MODELS = Array.from(
-      new Set(
-        [
-          process.env.GEMINI_TTS_MODEL,
-          "gemini-3.8-flash-tts",
-          "gemini-3.8-flash-lite-tts",
-          "gemini-2.5-flash",
-          "gemini-3.8-flash",
-        ].filter(Boolean) as string[]
-      )
-    );
-
     let response: any = null;
     let ttsError: any = null;
 
-    for (const model of CANDIDATE_TTS_MODELS) {
-      try {
-        response = await ai.models.generateContent({
-          model,
-          contents: promptText,
-          config: {
-            responseModalities: ["AUDIO"],
-            speechConfig,
-          },
-        });
+    for (const key of availableKeys) {
+      const ai = new GoogleGenAI({ apiKey: key });
 
-        if (response?.candidates?.[0]?.content?.parts) {
-          break;
+      for (const model of CANDIDATE_TTS_MODELS) {
+        try {
+          response = await ai.models.generateContent({
+            model,
+            contents: promptText,
+            config: {
+              responseModalities: ["AUDIO"],
+              speechConfig,
+            },
+          });
+
+          if (response?.candidates?.[0]?.content?.parts) {
+            break;
+          }
+        } catch (err: any) {
+          ttsError = err;
         }
-      } catch (err: any) {
-        ttsError = err;
+      }
+
+      if (response?.candidates?.[0]?.content?.parts) {
+        break;
       }
     }
 
@@ -140,26 +138,25 @@ export async function POST(req: NextRequest) {
     let outFormat = "wav";
 
     if (format === "mp3") {
-      const mp3 = convertWavToMp3(rawWavBuffer);
-      if (mp3) {
-        finalAudioBuffer = mp3;
+      const mp3Buf = convertWavToMp3(rawWavBuffer);
+      if (mp3Buf) {
+        finalAudioBuffer = mp3Buf;
         outFormat = "mp3";
       }
     }
 
-    return new NextResponse(new Uint8Array(finalAudioBuffer), {
+    return new Response(new Uint8Array(finalAudioBuffer), {
       status: 200,
       headers: {
         "Content-Type": outFormat === "mp3" ? "audio/mp3" : "audio/wav",
-        "Content-Length": finalAudioBuffer.length.toString(),
+        "Content-Disposition": `inline; filename="synthesized-voice.${outFormat}"`,
         "Cache-Control": "no-cache",
       },
     });
-  } catch (err: any) {
-    console.error("[TTS API Error]:", err);
+  } catch (error: any) {
     return NextResponse.json(
-      { success: false, error: err.message || "Voice generation failed." },
-      { status: 503 }
+      { success: false, error: error?.message || "Internal server error occurred during voice synthesis." },
+      { status: 500 }
     );
   }
 }
