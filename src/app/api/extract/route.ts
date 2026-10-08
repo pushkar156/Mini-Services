@@ -1,1 +1,1 @@
-export { POST } from "../mediadrop/route";
+export { GET, POST } from "../mediadrop/route";

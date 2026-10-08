@@ -98,11 +98,8 @@ async function extractPinterestNode(url: string): Promise<any> {
   };
 }
 
-export async function POST(req: Request) {
+async function handleExtraction(url: string | null) {
   try {
-    const body = await req.json();
-    const { url } = body;
-
     if (!url || typeof url !== "string" || !url.trim()) {
       return NextResponse.json({ error: "Please provide a valid media URL." }, { status: 400 });
     }
@@ -185,4 +182,19 @@ export async function POST(req: Request) {
   } catch (error: any) {
     return NextResponse.json({ error: error?.message || "Internal server error during extraction" }, { status: 500 });
   }
+}
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    return handleExtraction(body?.url);
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON request body." }, { status: 400 });
+  }
+}
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const url = searchParams.get("url");
+  return handleExtraction(url);
 }
