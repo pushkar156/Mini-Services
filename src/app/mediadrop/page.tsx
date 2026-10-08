@@ -15,70 +15,70 @@ import {
   Check,
   Activity,
   FileCheck,
+  AlertCircle,
+  Eye,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { saveHistoryItem } from "@/lib/historyService";
 
 interface MediaItem {
   url: string;
   type: "video" | "image";
-  quality: string;
+  quality?: string;
+  thumbnail?: string;
+  index?: number;
 }
 
 interface ExtractionResult {
+  success: boolean;
   platform: "instagram" | "pinterest";
-  type: "video" | "image";
+  type: "video" | "image" | "carousel";
   title: string;
   media: MediaItem[];
   thumbnail?: string;
   embedUrl?: string | null;
+  shortcode?: string;
+  pinId?: string;
+  sourceUrl?: string;
   meta?: {
     codec?: string;
     aspectRatio?: string;
     status?: string;
+    itemCount?: number;
+    directPostUrl?: string;
   };
 }
 
 export default function MediaDropPage() {
-  const [inputUrl, setInputUrl] = useState(
-    "https://www.instagram.com/reel/C82vLaMpkO3/?igsh=MWx1Ymx0NDBpdG1yaw=="
-  );
-  const [isLoading, setIsLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [result, setResult] = useState<ExtractionResult | null>({
-    platform: "instagram",
-    type: "video",
-    title: "Cinematic Vertical Scandinavian Interior // Basalt & Raw Oak",
-    thumbnail:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
-    media: [
-      {
-        url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
-        type: "video",
-        quality: "1080p MP4 (H.264)",
-      },
-    ],
-    meta: {
-      codec: "H.264 / AVC 60FPS",
-      aspectRatio: "9:16 Vertical",
-      status: "PAYLOAD_CACHED_EDGE",
-    },
-  });
+  const { user } = useAuth();
+
+  const [inputUrl, setInputUrl] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean>(false);
+  const [selectedMediaIndex, setSelectedMediaIndex] = useState<number>(0);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [result, setResult] = useState<ExtractionResult | null>(null);
 
   // Source platform detection
-  const detectedPlatform = inputUrl.includes("pinterest") || inputUrl.includes("pin.it")
-    ? "PIN / VISUAL"
-    : inputUrl.includes("instagram")
-    ? "IG / REEL"
-    : "RAW / URL";
+  const detectedPlatform =
+    inputUrl.includes("pinterest") || inputUrl.includes("pin.it")
+      ? "PINTEREST"
+      : inputUrl.includes("instagram") || inputUrl.includes("instagr.am")
+      ? "INSTAGRAM"
+      : inputUrl.trim()
+      ? "RAW URL"
+      : "STANDBY";
 
   const handleExtract = async () => {
     if (!inputUrl.trim() || isLoading) return;
     setIsLoading(true);
+    setErrorMsg(null);
 
     try {
       const res = await fetch("/api/mediadrop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: inputUrl }),
+        body: JSON.stringify({ url: inputUrl.trim() }),
       });
 
       const data = await res.json();
@@ -87,8 +87,26 @@ export default function MediaDropPage() {
       }
 
       setResult(data);
+      setSelectedMediaIndex(0);
+
+      // Save to Firestore History if signed in
+      if (user && data.success) {
+        saveHistoryItem(
+          user.uid,
+          "mediadrop",
+          data.title || `${data.platform.toUpperCase()} Media Asset`,
+          `${data.platform.toUpperCase()} ${data.type} extracted from ${inputUrl.slice(0, 40)}...`,
+          {
+            url: inputUrl,
+            platform: data.platform,
+            type: data.type,
+            mediaCount: data.media?.length || 1,
+            topMediaUrl: data.media?.[0]?.url,
+          }
+        ).catch((err) => console.error("MediaDrop history save failed:", err));
+      }
     } catch (err: any) {
-      alert(err.message || "Extraction error.");
+      setErrorMsg(err.message || "Extraction failed. Please check the URL and try again.");
     } finally {
       setIsLoading(false);
     }
@@ -97,36 +115,55 @@ export default function MediaDropPage() {
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
-      if (text) setInputUrl(text);
+      if (text) {
+        setInputUrl(text.trim());
+        setErrorMsg(null);
+      }
     } catch (e) {
-      // Clipboard access fallback
+      // Clipboard permissions fallback
     }
   };
 
+  const activeMediaItem = result?.media?.[selectedMediaIndex] || result?.media?.[0];
+
   const handleCopyLink = () => {
-    if (!result?.media[0]?.url) return;
-    navigator.clipboard.writeText(result.media[0].url);
+    if (!activeMediaItem?.url) return;
+    navigator.clipboard.writeText(activeMediaItem.url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDownload = () => {
-    if (!result?.media[0]?.url) return;
-    const mediaUrl = result.media[0].url;
-    const filename = `mediadrop_${result.platform}_${Date.now()}.${result.type === "video" ? "mp4" : "jpg"}`;
-    const streamUrl = `/api/stream?url=${encodeURIComponent(mediaUrl)}&filename=${encodeURIComponent(filename)}`;
-    window.open(streamUrl, "_blank");
+    if (!activeMediaItem?.url || !result) return;
+    const isVideo = activeMediaItem.type === "video";
+    const ext = isVideo ? "mp4" : "jpg";
+    const filename = `mediadrop_${result.platform}_${Date.now()}.${ext}`;
+
+    // If media URL is an Instagram web link rather than CDN file, open direct
+    if (activeMediaItem.url.includes("instagram.com/p/") || activeMediaItem.url.includes("instagram.com/reel/")) {
+      window.open(activeMediaItem.url, "_blank");
+      return;
+    }
+
+    const streamUrl = `/api/stream?url=${encodeURIComponent(activeMediaItem.url)}&filename=${encodeURIComponent(filename)}`;
+    const anchor = document.createElement("a");
+    anchor.href = streamUrl;
+    anchor.download = filename;
+    anchor.target = "_blank";
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
   };
 
   return (
     <div className="flex-1 flex flex-col bg-[#121315] text-[#E3E2E5] selection:bg-[#CDC6BB] selection:text-[#121315] min-h-[calc(100vh-48px)]">
       <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 md:px-6 py-8 flex flex-col space-y-8">
-        {/* 1. Centered Ingestion Hero Section */}
+        {/* 1. Ingestion Hero Section */}
         <section className="w-full flex flex-col items-center justify-center text-center">
           <div className="inline-flex items-center space-x-2 bg-[#1B1C1E] px-3 py-1 border border-[#4A463F]/30 rounded mb-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#688B9A] animate-pulse"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span className="font-mono text-[10px] uppercase text-[#969087] tracking-wider">
-              Ingestion Microservice // Direct Pipe v4.2
+              High-Fidelity Extraction // Multi-Platform v4.5
             </span>
           </div>
 
@@ -134,13 +171,13 @@ export default function MediaDropPage() {
             MediaDrop Vault
           </h1>
           <p className="text-xs md:text-sm text-[#969087] max-w-xl font-sans">
-            Direct high-fidelity extraction for Instagram reels, carousels, and Pinterest visual pins.
+            Direct high-fidelity extraction for Instagram reels, carousels, and Pinterest original 4K plates.
           </p>
 
           {/* URL Extraction Capsule */}
           <div className="w-full max-w-3xl mt-6">
             <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center min-h-[56px] sm:h-16 w-full bg-[#0D0E10] border border-[#4A463F]/40 rounded-xl p-2 sm:px-3 gap-2 transition-all duration-200 focus-within:border-[#CDC6BB] shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
-              {/* Source Auto-Detect Badge & Input Group */}
+              {/* Source Auto-Detect Badge */}
               <div className="flex items-center flex-1">
                 <div className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-[#1B1C1E] border border-[#4A463F]/30 rounded-lg mr-2 select-none shrink-0">
                   <Camera className="w-4 h-4 text-[#CDC6BB]" />
@@ -152,8 +189,14 @@ export default function MediaDropPage() {
                 {/* Input Element */}
                 <input
                   value={inputUrl}
-                  onChange={(e) => setInputUrl(e.target.value)}
-                  placeholder="Paste Instagram or Pinterest URL..."
+                  onChange={(e) => {
+                    setInputUrl(e.target.value);
+                    if (errorMsg) setErrorMsg(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleExtract();
+                  }}
+                  placeholder="Paste Instagram (reel/post) or Pinterest (pin/pin.it) URL..."
                   className="flex-1 bg-transparent border-0 text-[#EDEAE5] placeholder-[#969087] font-mono text-xs md:text-sm focus:outline-none px-1 min-w-0"
                 />
               </div>
@@ -190,16 +233,23 @@ export default function MediaDropPage() {
               </div>
             </div>
 
+            {/* Error Message Banner */}
+            {errorMsg && (
+              <div className="mt-3 p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg flex items-center space-x-2.5 text-xs text-rose-300 font-mono text-left">
+                <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                <span className="flex-1">{errorMsg}</span>
+              </div>
+            )}
+
             {/* Extraction Telemetry Status Bar */}
             <div className="flex flex-wrap items-center justify-between px-3 mt-2 font-mono text-[10px] text-[#969087]">
               <div className="flex items-center space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#688B9A] animate-pulse"></span>
+                <span className={`w-1.5 h-1.5 rounded-full ${result ? "bg-emerald-400" : "bg-[#688B9A]"} animate-pulse`}></span>
                 <span>STATUS: {result?.meta?.status || "READY_IDLE"}</span>
               </div>
               <div className="flex items-center space-x-4">
-                <span>BYPASS_RATE_LIMIT: ACTIVE</span>
-                <span>CDN: RESIDENTIAL_DIRECT</span>
-                <span>LATENCY: 38ms</span>
+                <span>PIPE: DIRECT_CDN</span>
+                <span>LATENCY: FAST</span>
               </div>
             </div>
           </div>
@@ -208,72 +258,95 @@ export default function MediaDropPage() {
         {/* 2. Media Preview Result Stage (Bento Grid) */}
         {result && (
           <section className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Left Column: Media Showcase Player (7 cols) */}
+            {/* Left Column: Media Player / Viewer (7 cols) */}
             <div className="lg:col-span-7 bg-[#1B1C1E] border border-[#4A463F]/30 rounded-lg flex flex-col overflow-hidden shadow-xl">
               {/* Card Sub-Header */}
               <div className="h-9 px-4 flex items-center justify-between border-b border-[#4A463F]/30 bg-[#0D0E10]">
                 <div className="flex items-center space-x-2">
                   <Film className="w-3.5 h-3.5 text-[#CDC6BB]" />
                   <span className="font-mono text-[10px] uppercase text-[#EDEAE5] tracking-wider">
-                    Source Preview Stream
+                    {result.platform} Preview Stream
                   </span>
                 </div>
                 <div className="flex items-center space-x-3 font-mono text-[10px] text-[#969087]">
                   <span className="bg-[#1F2022] px-1.5 py-0.5 rounded text-[#CDC6BB]">
-                    {result.meta?.codec || "1080P HD"}
+                    {activeMediaItem?.quality || (activeMediaItem?.type === "video" ? "1080P MP4" : "Original 4K Plate")}
                   </span>
-                  <span>60 FPS</span>
+                  <span>{activeMediaItem?.type.toUpperCase()}</span>
                 </div>
               </div>
 
               {/* Viewport Container */}
-              <div className="relative bg-[#0D0E10] flex items-center justify-center p-6">
-                <div className="relative w-full max-w-[360px] aspect-[9/16] bg-[#121315] rounded-lg overflow-hidden border border-[#4A463F]/40 shadow-2xl flex flex-col justify-end">
-                  {/* Visual Render / Poster */}
-                  {result.thumbnail ? (
+              <div className="relative bg-[#0D0E10] flex items-center justify-center p-4 md:p-6 min-h-[380px]">
+                <div className="relative w-full max-w-[420px] aspect-[9/16] max-h-[640px] bg-[#121315] rounded-lg overflow-hidden border border-[#4A463F]/40 shadow-2xl flex items-center justify-center">
+                  {/* VIDEO PLAYER (When direct video stream is available) */}
+                  {activeMediaItem?.type === "video" && !activeMediaItem.url.includes("instagram.com/p/") && !activeMediaItem.url.includes("instagram.com/reel/") ? (
+                    <video
+                      key={activeMediaItem.url}
+                      src={activeMediaItem.url}
+                      poster={result.thumbnail || activeMediaItem.thumbnail}
+                      controls
+                      playsInline
+                      className="w-full h-full object-contain bg-black"
+                    />
+                  ) : result.embedUrl ? (
+                    /* INSTAGRAM SECURE EMBED VIEWER */
+                    <iframe
+                      src={result.embedUrl}
+                      className="w-full h-full border-0 bg-black"
+                      allowTransparency
+                      allowFullScreen
+                      scrolling="no"
+                    />
+                  ) : activeMediaItem?.url ? (
+                    /* IMAGE VIEWER */
                     <img
-                      src={result.thumbnail}
+                      src={activeMediaItem.url}
                       alt={result.title}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="w-full h-full object-contain bg-black"
+                      onError={(e) => {
+                        // Fallback to proxy route if direct CDN is hotlink-blocked
+                        const target = e.currentTarget;
+                        if (!target.src.includes("/api/thumb")) {
+                          target.src = `/api/thumb?url=${encodeURIComponent(activeMediaItem.url)}`;
+                        }
+                      }}
                     />
                   ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-[#1B1C1E] text-[#969087] font-mono text-xs">
+                    <div className="flex items-center justify-center text-[#969087] font-mono text-xs">
                       Media Stream Standby
                     </div>
                   )}
-
-                  {/* Dark Vignette Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0D0E10] via-transparent to-black/30 pointer-events-none"></div>
-
-                  {/* Central Play Pip */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <button
-                      onClick={handleDownload}
-                      className="w-14 h-14 rounded-full bg-[#121315]/80 backdrop-blur border border-[#CDC6BB]/40 text-[#EDEAE5] flex items-center justify-center hover:scale-105 transition-transform"
-                      type="button"
-                    >
-                      <Play className="w-6 h-6 fill-current pl-1" />
-                    </button>
-                  </div>
-
-                  {/* Timeline overlay bar */}
-                  <div className="relative z-10 p-4 space-y-2">
-                    <div className="flex items-center justify-between font-mono text-[10px] text-[#EDEAE5]">
-                      <span className="bg-[#0D0E10]/80 px-1.5 py-0.5 rounded">00:15 / 00:45</span>
-                      <span className="text-[#CDC6BB]">ORIGINAL HIGH-RES</span>
-                    </div>
-                    <div className="w-full h-1 bg-[#343537] rounded-full overflow-hidden relative">
-                      <div className="h-full bg-[#9E988E] w-[42%]"></div>
-                    </div>
-                  </div>
                 </div>
               </div>
+
+              {/* Carousel Multi-Slide Bar (if carousel) */}
+              {result.media && result.media.length > 1 && (
+                <div className="px-4 py-3 bg-[#161719] border-t border-[#4A463F]/20 flex items-center space-x-2 overflow-x-auto">
+                  <span className="text-[10px] font-mono uppercase text-[#969087] mr-2 shrink-0">
+                    Slides ({result.media.length}):
+                  </span>
+                  {result.media.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedMediaIndex(idx)}
+                      className={`px-3 py-1 text-xs font-mono rounded border transition-all ${
+                        selectedMediaIndex === idx
+                          ? "bg-[#CDC6BB] text-[#121315] font-bold border-[#CDC6BB]"
+                          : "bg-[#1F2022] text-[#969087] hover:text-[#EDEAE5] border-[#4A463F]/30"
+                      }`}
+                    >
+                      {item.type === "video" ? "🎬 Video" : "🖼️ Plate"} {idx + 1}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {/* Integrated Action Bar */}
               <div className="p-3 border-t border-[#4A463F]/30 bg-[#1F2022] flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
                 <div className="flex items-center space-x-2">
                   <a
-                    href={inputUrl}
+                    href={result.sourceUrl || inputUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="px-3 py-1.5 bg-[#292A2C] border border-[#4A463F]/40 hover:border-[#CDC6BB] text-[#EDEAE5] rounded flex items-center space-x-1.5 transition-all"
@@ -289,7 +362,7 @@ export default function MediaDropPage() {
                     className="px-3 py-1.5 bg-[#292A2C] border border-[#4A463F]/40 hover:border-[#CDC6BB] text-[#EDEAE5] rounded flex items-center space-x-1.5 transition-all"
                   >
                     {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <LinkIcon className="w-3.5 h-3.5" />}
-                    <span>{copied ? "Copied" : "Copy CDN Link"}</span>
+                    <span>{copied ? "Copied" : "Copy Direct Link"}</span>
                   </button>
 
                   <button
@@ -303,7 +376,7 @@ export default function MediaDropPage() {
               </div>
             </div>
 
-            {/* Right Column: Media Metadata & Extraction Inspector (5 cols) */}
+            {/* Right Column: Metadata & Telemetry Inspector (5 cols) */}
             <div className="lg:col-span-5 flex flex-col space-y-4">
               {/* Telemetry Tile */}
               <div className="bg-[#1B1C1E] border border-[#4A463F]/30 rounded-lg p-5 space-y-4 shadow-xl">
@@ -314,63 +387,55 @@ export default function MediaDropPage() {
                       Payload Telemetry
                     </span>
                   </div>
-                  <span className="font-mono text-[10px] text-[#CDC6BB]">INTEGRITY: 100% OK</span>
+                  <span className="font-mono text-[10px] text-emerald-400 font-bold">VERIFIED CDN</span>
                 </div>
 
                 {/* Parameter List */}
-                <div className="space-y-3 font-mono text-xs">
-                  <div className="flex justify-between items-center py-1.5 border-b border-[#4A463F]/20">
-                    <span className="text-[#969087]">Platform</span>
-                    <span className="text-[#EDEAE5] uppercase">{result.platform}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-1.5 border-b border-[#4A463F]/20">
-                    <span className="text-[#969087]">Media Type</span>
-                    <span className="text-[#EDEAE5] uppercase">{result.type}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-1.5 border-b border-[#4A463F]/20">
-                    <span className="text-[#969087]">Aspect Ratio</span>
-                    <span className="text-[#CDC6BB]">{result.meta?.aspectRatio || "9:16"}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-1.5 border-b border-[#4A463F]/20">
-                    <span className="text-[#969087]">Codec / Stream</span>
-                    <span className="text-[#EDEAE5]">{result.meta?.codec || "Direct Stream"}</span>
-                  </div>
-                  <div className="py-2">
-                    <span className="text-[10px] text-[#969087] block mb-1">Title / Caption</span>
-                    <p className="text-xs text-[#CDC6BB] font-sans line-clamp-3 leading-relaxed">
+                <div className="space-y-2.5 font-mono text-xs">
+                  <div className="flex justify-between py-1 border-b border-[#4A463F]/15">
+                    <span className="text-[#969087]">TITLE</span>
+                    <span className="text-[#EDEAE5] font-sans font-medium text-right max-w-[220px] truncate">
                       {result.title}
-                    </p>
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between py-1 border-b border-[#4A463F]/15">
+                    <span className="text-[#969087]">PLATFORM</span>
+                    <span className="text-[#CDC6BB] uppercase">{result.platform}</span>
+                  </div>
+
+                  <div className="flex justify-between py-1 border-b border-[#4A463F]/15">
+                    <span className="text-[#969087]">MEDIA TYPE</span>
+                    <span className="text-[#EDEAE5] capitalize">{activeMediaItem?.type || result.type}</span>
+                  </div>
+
+                  {result.media?.length > 1 && (
+                    <div className="flex justify-between py-1 border-b border-[#4A463F]/15">
+                      <span className="text-[#969087]">TOTAL SLIDES</span>
+                      <span className="text-[#EDEAE5]">{result.media.length} Items</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between py-1 border-b border-[#4A463F]/15">
+                    <span className="text-[#969087]">RESOLUTION</span>
+                    <span className="text-[#EDEAE5]">{activeMediaItem?.quality || "Original Master"}</span>
+                  </div>
+
+                  <div className="flex justify-between py-1 border-b border-[#4A463F]/15">
+                    <span className="text-[#969087]">SECURITY</span>
+                    <span className="text-[#EDEAE5]">Direct Encrypted Pipe</span>
                   </div>
                 </div>
 
-                {/* Direct Action Buttons */}
-                <div className="pt-3 border-t border-[#4A463F]/30 space-y-2">
+                <div className="pt-2">
                   <button
                     onClick={handleDownload}
-                    className="w-full py-2.5 bg-[#9E988E] hover:bg-[#CDC6BB] text-[#121315] font-mono text-xs font-semibold uppercase tracking-wider rounded flex items-center justify-center space-x-2 transition-colors"
+                    className="w-full py-2.5 bg-[#CDC6BB] hover:bg-[#b5afa6] text-[#121315] font-mono text-xs font-bold uppercase rounded flex items-center justify-center space-x-2 transition-all"
                   >
                     <Download className="w-4 h-4" />
-                    <span>Download Original Media</span>
-                  </button>
-                  <button
-                    onClick={handleCopyLink}
-                    className="w-full py-2 bg-[#121315] hover:bg-[#292A2C] border border-[#4A463F]/40 text-[#CDC6BB] font-mono text-xs uppercase rounded flex items-center justify-center space-x-2 transition-colors"
-                  >
-                    <LinkIcon className="w-3.5 h-3.5" />
-                    <span>Copy CDN Media Stream URL</span>
+                    <span>Download Extracted Media</span>
                   </button>
                 </div>
-              </div>
-
-              {/* Nordic Glacier Vault Information Note */}
-              <div className="bg-[#121315] border border-[#4A463F]/20 p-4 rounded text-xs text-[#969087] font-mono space-y-1.5">
-                <span className="text-[#CDC6BB] font-semibold block uppercase">
-                  Direct Ingestion Pipeline
-                </span>
-                <p>
-                  Zero serverless IP bans. MediaDrop leverages direct residential client handshake
-                  and CDN stream extraction so downloads stay ultra-fast without server rate limits.
-                </p>
               </div>
             </div>
           </section>
