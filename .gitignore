@@ -19,6 +19,7 @@ dist/
 out/
 build/
 */build/
+*.tsbuildinfo
 
 # Python Cache & Virtual Environments
 __pycache__/

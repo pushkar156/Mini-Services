@@ -1,7 +1,6 @@
 import {
   collection,
   addDoc,
-  getDocs,
   deleteDoc,
   doc,
   query,
@@ -57,35 +56,6 @@ export async function saveHistoryItem(
   });
 
   return docRef.id;
-}
-
-/**
- * Fetch history items with optional service filtering
- */
-export async function fetchUserHistory(
-  userId: string,
-  serviceFilter?: ServiceType,
-  maxItems: number = 50
-): Promise<HistoryItem[]> {
-  if (!userId) return [];
-
-  const historyCollection = collection(db, "users", userId, "history");
-  let q = query(historyCollection, orderBy("createdAt", "desc"), limit(maxItems));
-
-  if (serviceFilter) {
-    q = query(
-      historyCollection,
-      where("service", "==", serviceFilter),
-      orderBy("createdAt", "desc"),
-      limit(maxItems)
-    );
-  }
-
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((docSnap) => ({
-    id: docSnap.id,
-    ...(docSnap.data() as Omit<HistoryItem, "id">),
-  }));
 }
 
 /**

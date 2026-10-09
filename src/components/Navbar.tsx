@@ -28,10 +28,6 @@ import {
 import { HistoryDrawer } from "./HistoryDrawer";
 import OviLogo from "./OviLogo";
 
-interface NavbarProps {
-  current?: string;
-}
-
 const SERVICES = [
   { id: "hub", name: "Hub", title: "The Atelier Directory", href: "/", icon: Home, desc: "Overview of creative engines" },
   { id: "voice", name: "Voice", title: "Voice Studio", href: "/voice", icon: Mic, desc: "Braun Hi-Fi audio console" },
@@ -42,7 +38,7 @@ const SERVICES = [
   { id: "photonarrator", name: "PhotoNarrator", title: "PhotoNarrator", href: "/photonarrator", icon: Camera, desc: "Cine-silver darkroom prose" },
 ];
 
-export default function Navbar({ current }: NavbarProps) {
+export default function Navbar() {
   const pathname = usePathname();
   const { isConfigured, provider, openModal } = useApiKey();
   const { user, setAuthModalOpen, signOutUser } = useAuth();

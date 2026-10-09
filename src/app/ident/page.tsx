@@ -13,8 +13,6 @@ import {
   Download,
   ExternalLink,
   ChevronDown,
-  Layers,
-  Wand2,
 } from "lucide-react";
 
 interface BrandCard {

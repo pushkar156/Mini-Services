@@ -9,11 +9,6 @@ import {
   Copy,
   Check,
   RefreshCw,
-  Sliders,
-  Download,
-  Share2,
-  Layers,
-  ArrowUpRight,
 } from "lucide-react";
 
 interface NarrativeData {

@@ -14,7 +14,6 @@ import {
   Layers,
   Check,
   Activity,
-  FileCheck,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { saveHistoryItem } from "@/lib/historyService";

@@ -18,8 +18,6 @@ import {
   Sparkles,
   FileCode,
   Crosshair,
-  Sliders,
-  Move,
   Activity,
 } from "lucide-react";
 

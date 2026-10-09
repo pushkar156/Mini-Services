@@ -12,10 +12,8 @@ import {
   Camera,
   Database,
   Cpu,
-  RefreshCw,
   ArrowRight,
   ShieldCheck,
-  Zap,
 } from "lucide-react";
 
 const SERVICES = [
@@ -88,7 +86,7 @@ const SERVICES = [
 ];
 
 export default function AtelierHubPage() {
-  const { isConfigured, provider, ollamaModel, openModal } = useApiKey();
+  const { isConfigured, provider, ollamaModel } = useApiKey();
 
   return (
     <main className="flex-1 w-full max-w-[1440px] mx-auto pt-6 pb-12 px-4 sm:px-6 md:px-8 flex flex-col justify-between">

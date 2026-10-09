@@ -14,7 +14,6 @@ import {
   Trash2,
   Copy,
   Check,
-  ExternalLink,
   Mic,
   FileEdit,
   Network,

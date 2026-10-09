@@ -4,7 +4,6 @@ const config: Config = {
   darkMode: "class",
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./stitch-design/**/*.{html,js}",
   ],
   theme: {
     extend: {

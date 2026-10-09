@@ -5,7 +5,7 @@ import { spawn } from "child_process";
 // Helper to run Python extraction CLI
 function runPythonExtractor(url: string): Promise<any> {
   return new Promise((resolve, reject) => {
-    const pythonScript = path.join(process.cwd(), "MediaDrop", "services", "cli_extract.py");
+    const pythonScript = path.join(process.cwd(), "src", "services", "mediadrop", "cli_extract.py");
     // Try python then python3
     const pyCmd = process.platform === "win32" ? "python" : "python3";
     const pyProcess = spawn(pyCmd, [pythonScript, url]);

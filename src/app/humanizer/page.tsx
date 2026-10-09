@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApiKey } from "@/context/ApiKeyContext";
 import { useAuth } from "@/context/AuthContext";
@@ -11,12 +10,9 @@ import {
   Check,
   ArrowUpRight,
   Sparkles,
-  Sliders,
   Trash2,
   GitCompare,
   Feather,
-  Layers,
-  Wand2,
 } from "lucide-react";
 
 const SAMPLE_ROBOTIC_TEXT = `In today's fast-paced digital ecosystem, it is vital to delve into the underlying structural foundations of contemporary generative intelligence. The technological leap stands as a clear testament to collective architectural iteration, functioning as a visionary beacon for automated systems.

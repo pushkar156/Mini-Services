@@ -37,7 +37,7 @@ function convertWavToMp3(wavBuffer: any, bitrate = 128): Buffer | null {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { text, voice = "Puck", dialogue, format = "mp3", speed = 1.0, apiKey: bodyApiKey, geminiKey: bodyGeminiKey } = body;
+    const { text, voice = "Puck", dialogue, format = "mp3", apiKey: bodyApiKey, geminiKey: bodyGeminiKey } = body;
     const headerApiKey = req.headers.get("x-gemini-api-key") || undefined;
     const clientKey = bodyApiKey || bodyGeminiKey || headerApiKey;
 
