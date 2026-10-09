@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import Navbar from "@/components/Navbar";
 import SettingsModal from "@/components/SettingsModal";
 import { AuthModal } from "@/components/AuthModal";
+import { Analytics } from "@vercel/analytics/next";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -76,6 +77,7 @@ export default function RootLayout({
             </AuthProvider>
           </ApiKeyProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
