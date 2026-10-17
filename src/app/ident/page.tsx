@@ -13,6 +13,8 @@ import {
   Download,
   ExternalLink,
   ChevronDown,
+  AlertCircle,
+  X,
 } from "lucide-react";
 
 interface BrandCard {
@@ -68,6 +70,8 @@ export default function IdentPage() {
   const [brands, setBrands] = useState<BrandCard[]>(INITIAL_BRANDS);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedName, setCopiedName] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const ARCHETYPES = [
     "Minimalist Hardware",
@@ -86,6 +90,8 @@ export default function IdentPage() {
   const handleSynthesize = async () => {
     if (!keywords.trim() || isLoading) return;
     setIsLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
 
     try {
       const res = await fetch("/api/ident", {
@@ -105,6 +111,7 @@ export default function IdentPage() {
       }
 
       setBrands(data.names);
+      setSuccessMsg(`Generated ${data.names?.length || 6} brand identity vectors with phonosemantic scores.`);
 
       if (user && data.names && data.names.length > 0) {
         const topName = data.names[0].name;
@@ -117,7 +124,7 @@ export default function IdentPage() {
         ).catch((err) => console.error("History save failed:", err));
       }
     } catch (err: any) {
-      alert(err.message || "Synthesis error");
+      setErrorMsg(err.message || "Synthesis error. Please verify your prompt or Gemini API key.");
     } finally {
       setIsLoading(false);
     }
@@ -153,6 +160,31 @@ export default function IdentPage() {
   return (
     <div className="flex-1 flex flex-col bg-[#0D0E10] text-[#E3E2E5] selection:bg-[#CDC6BB] selection:text-[#0D0E10] min-h-[calc(100vh-48px)]">
       <main className="flex-1 flex flex-col w-full max-w-[1440px] mx-auto px-4 md:px-6 py-6 space-y-6">
+        {/* Feedback Alert Banners */}
+        {errorMsg && (
+          <div className="p-3.5 bg-red-950/40 border border-red-500/30 rounded flex items-center justify-between text-xs font-mono text-red-200">
+            <div className="flex items-center gap-2">
+              <AlertCircle size={15} className="text-red-400 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+            <button onClick={() => setErrorMsg(null)} className="p-1 hover:text-white">
+              <X size={14} />
+            </button>
+          </div>
+        )}
+
+        {successMsg && (
+          <div className="p-3.5 bg-emerald-950/40 border border-emerald-500/30 rounded flex items-center justify-between text-xs font-mono text-emerald-200">
+            <div className="flex items-center gap-2">
+              <Check size={15} className="text-emerald-400 shrink-0" />
+              <span>{successMsg}</span>
+            </div>
+            <button onClick={() => setSuccessMsg(null)} className="p-1 hover:text-white">
+              <X size={14} />
+            </button>
+          </div>
+        )}
+
         {/* Atelier Header Section */}
         <section className="border-b border-[#4A463F]/30 pb-6 pt-2 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-1.5">

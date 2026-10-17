@@ -13,6 +13,8 @@ import {
   Trash2,
   GitCompare,
   Feather,
+  AlertCircle,
+  X,
 } from "lucide-react";
 
 const SAMPLE_ROBOTIC_TEXT = `In today's fast-paced digital ecosystem, it is vital to delve into the underlying structural foundations of contemporary generative intelligence. The technological leap stands as a clear testament to collective architectural iteration, functioning as a visionary beacon for automated systems.
@@ -46,6 +48,8 @@ By breaking machine symmetry and varying syntactic weights, the text regains its
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [diffMode, setDiffMode] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [stats, setStats] = useState({
     burstiness: "+38% Variance",
     perplexity: "Organic (88/100)",
@@ -70,6 +74,8 @@ By breaking machine symmetry and varying syntactic weights, the text regains its
   const handleHumanize = async () => {
     if (!inputText.trim() || isLoading) return;
     setIsLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
     const startTime = Date.now();
 
     try {
@@ -90,6 +96,7 @@ By breaking machine symmetry and varying syntactic weights, the text regains its
       }
 
       setHumanizedText(data.humanizedText);
+      setSuccessMsg("Prose successfully humanized with adjusted cadence & syntactic variance.");
 
       if (user && data.humanizedText) {
         saveHistoryItem(
@@ -114,7 +121,7 @@ By breaking machine symmetry and varying syntactic weights, the text regains its
         latency: `${elapsed}ms`,
       });
     } catch (err: any) {
-      alert(err.message || "Failed to transform text.");
+      setErrorMsg(err.message || "Failed to transform text. Please check your API key.");
     } finally {
       setIsLoading(false);
     }
@@ -127,7 +134,9 @@ By breaking machine symmetry and varying syntactic weights, the text regains its
   };
 
   const handleSendToVoice = () => {
-    // Save to sessionStorage and navigate
+    // Save to both localStorage and sessionStorage so Voice Studio detects it seamlessly
+    localStorage.setItem("OVI_HUB_TRANSFER_TEXT", humanizedText);
+    sessionStorage.setItem("OVI_HUB_TRANSFER_TEXT", humanizedText);
     sessionStorage.setItem("voice_preset_script", humanizedText);
     router.push("/voice");
   };
@@ -135,6 +144,31 @@ By breaking machine symmetry and varying syntactic weights, the text regains its
   return (
     <div className="flex-1 flex flex-col bg-[#121315] text-[#E3E2E5] selection:bg-[#343537] selection:text-[#CDC6BB]">
       <main className="flex-1 flex flex-col max-w-[1440px] w-full mx-auto px-4 md:px-6">
+        
+        {/* Feedback Alert Banners */}
+        {errorMsg && (
+          <div className="mt-4 p-3.5 bg-red-950/40 border border-red-500/30 rounded flex items-center justify-between text-xs font-mono text-red-200">
+            <div className="flex items-center gap-2">
+              <AlertCircle size={15} className="text-red-400 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+            <button onClick={() => setErrorMsg(null)} className="p-1 hover:text-white">
+              <X size={14} />
+            </button>
+          </div>
+        )}
+
+        {successMsg && (
+          <div className="mt-4 p-3.5 bg-emerald-950/40 border border-emerald-500/30 rounded flex items-center justify-between text-xs font-mono text-emerald-200">
+            <div className="flex items-center gap-2">
+              <Check size={15} className="text-emerald-400 shrink-0" />
+              <span>{successMsg}</span>
+            </div>
+            <button onClick={() => setSuccessMsg(null)} className="p-1 hover:text-white">
+              <X size={14} />
+            </button>
+          </div>
+        )}
         {/* Editorial Studio Header Section */}
         <section className="py-6 flex flex-col items-center justify-center text-center border-b border-[#4A463F]/20 relative">
           <div className="inline-flex items-center gap-2 mb-1.5">

@@ -24,6 +24,8 @@ import {
   Camera,
   Home,
   Sliders,
+  Mail,
+  Phone,
 } from "lucide-react";
 import { HistoryDrawer } from "./HistoryDrawer";
 import OviLogo from "./OviLogo";
@@ -338,6 +340,24 @@ export default function Navbar() {
                   <Sliders size={13} />
                   <span>BYOK & Models</span>
                 </button>
+              </div>
+
+              {/* Direct Atelier Contact Links */}
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <a
+                  href="mailto:support@oviatelier.dev"
+                  className="p-2 bg-[#1B1C1E]/60 hover:bg-[#1B1C1E] border border-white/[0.06] rounded flex items-center justify-center gap-1.5 font-mono text-[10px] text-[#969087] hover:text-[#EDEAE5] transition-colors"
+                >
+                  <Mail size={12} className="text-[#CDC6BB]" />
+                  <span>Email Atelier</span>
+                </a>
+                <a
+                  href="tel:+18005550199"
+                  className="p-2 bg-[#1B1C1E]/60 hover:bg-[#1B1C1E] border border-white/[0.06] rounded flex items-center justify-center gap-1.5 font-mono text-[10px] text-[#969087] hover:text-[#EDEAE5] transition-colors"
+                >
+                  <Phone size={12} className="text-[#CDC6BB]" />
+                  <span>Direct Hotline</span>
+                </a>
               </div>
 
               <div className="flex items-center justify-between px-1 text-[#7A7E85] font-mono text-[10px]">

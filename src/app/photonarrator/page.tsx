@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { useApiKey } from "@/context/ApiKeyContext";
+import { useAuth } from "@/context/AuthContext";
+import { saveHistoryItem } from "@/lib/historyService";
 import {
   Upload,
   Sparkles,
@@ -9,6 +11,8 @@ import {
   Copy,
   Check,
   RefreshCw,
+  AlertCircle,
+  X,
 } from "lucide-react";
 
 interface NarrativeData {
@@ -26,7 +30,7 @@ interface NarrativeData {
 }
 
 const DEFAULT_IMAGE =
-  "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80";
+  "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=960&q=75";
 
 const DEFAULT_NARRATIVE: NarrativeData = {
   title: "Monument in Residual Daylight",
@@ -46,6 +50,7 @@ In the far threshold, the miniscule geometry of human posture provides not mere 
 
 export default function PhotoNarratorPage() {
   const { apiKey } = useApiKey();
+  const { user } = useAuth();
 
   const [depth, setDepth] = useState<"haiku" | "editorial" | "cinematic">("editorial");
   const [currentImage, setCurrentImage] = useState<string>(DEFAULT_IMAGE);
@@ -53,6 +58,8 @@ export default function PhotoNarratorPage() {
   const [narrative, setNarrative] = useState<NarrativeData>(DEFAULT_NARRATIVE);
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -92,6 +99,9 @@ export default function PhotoNarratorPage() {
 
   const triggerApi = async (base64: string) => {
     setIsLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
+
     try {
       const res = await fetch("/api/narrate", {
         method: "POST",
@@ -109,8 +119,25 @@ export default function PhotoNarratorPage() {
       }
 
       setNarrative(data);
+      setSuccessMsg("Visual plate analyzed and exhibition label curated successfully.");
+
+      if (user && data.title) {
+        saveHistoryItem(
+          user.uid,
+          "photonarrator",
+          `Photo Narrative: ${data.title}`,
+          `Curated in ${depth} mode — "${data.hook?.slice(0, 70)}..."`,
+          {
+            title: data.title,
+            plateNumber: data.plateNumber,
+            depth,
+            hook: data.hook,
+            metrology: data.metrology,
+          }
+        ).catch((err) => console.error("PhotoNarrator history save failed:", err));
+      }
     } catch (err: any) {
-      alert(err.message || "Narrative error.");
+      setErrorMsg(err.message || "Failed to analyze photograph. Please verify your Gemini API key.");
     } finally {
       setIsLoading(false);
     }
@@ -126,6 +153,31 @@ export default function PhotoNarratorPage() {
   return (
     <div className="flex-1 flex flex-col bg-[#121315] text-[#E3E2E5] selection:bg-[#CDC6BB] selection:text-[#121315] min-h-[calc(100vh-48px)]">
       <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 md:px-6 py-6 flex flex-col space-y-6">
+        {/* Feedback Alert Banners */}
+        {errorMsg && (
+          <div className="p-3.5 bg-red-950/40 border border-red-500/30 rounded flex items-center justify-between text-xs font-mono text-red-200">
+            <div className="flex items-center gap-2">
+              <AlertCircle size={15} className="text-red-400 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+            <button onClick={() => setErrorMsg(null)} className="p-1 hover:text-white">
+              <X size={14} />
+            </button>
+          </div>
+        )}
+
+        {successMsg && (
+          <div className="p-3.5 bg-emerald-950/40 border border-emerald-500/30 rounded flex items-center justify-between text-xs font-mono text-emerald-200">
+            <div className="flex items-center gap-2">
+              <Check size={15} className="text-emerald-400 shrink-0" />
+              <span>{successMsg}</span>
+            </div>
+            <button onClick={() => setSuccessMsg(null)} className="p-1 hover:text-white">
+              <X size={14} />
+            </button>
+          </div>
+        )}
+
         {/* Gallery Sub-Header & Narrative Depth Selector */}
         <section className="py-4 border-b border-[#4A463F]/20 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="flex flex-col sm:flex-row sm:items-baseline gap-3">
@@ -198,6 +250,8 @@ export default function PhotoNarratorPage() {
                 <img
                   src={currentImage}
                   alt={narrative.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover filter contrast-[1.08] grayscale brightness-[0.96] transition-transform duration-700 ease-out hover:scale-[1.01]"
                 />
 
@@ -218,12 +272,12 @@ export default function PhotoNarratorPage() {
               {/* Sub-strip with Replace Button */}
               <div className="w-full mt-4 pt-3 border-t border-[#4A463F]/20 flex flex-wrap items-center justify-between font-mono text-[10px] text-[#969087] gap-2">
                 <div className="flex items-center space-x-4">
-                  <span>FILE: M11_08492_SILVER.DNG</span>
+                  <span>ACTIVE PLATE: EMULSION MATRIX</span>
                   <span>CURVE: Tri-X 400 Response</span>
                 </div>
                 <label className="cursor-pointer font-mono text-[10px] text-[#CDC6BB] hover:text-[#EDEAE5] flex items-center gap-1 uppercase transition-colors">
                   <Upload className="w-3 h-3" />
-                  <span>Replace Visual Plate</span>
+                  <span>Upload Photograph</span>
                   <input
                     type="file"
                     accept="image/*"

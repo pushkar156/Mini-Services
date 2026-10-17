@@ -14,6 +14,8 @@ import {
   Layers,
   Check,
   Activity,
+  AlertCircle,
+  X,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { saveHistoryItem } from "@/lib/historyService";
@@ -63,20 +65,22 @@ export default function MediaDropPage() {
   const [inputUrl, setInputUrl] = useState("https://www.instagram.com/reel/DctPchKOVcw/");
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [result, setResult] = useState<ExtractionResult | null>({
     platform: "instagram",
     type: "video",
     media_type: "video",
     title: "If you’re going to play, play with fire // Carlos Alcaraz",
     thumbnail:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=75",
     thumbnail_url:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=75",
     media_url:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=75",
     media: [
       {
-        url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+        url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=75",
         type: "video",
         quality: "1080p MP4 (H.264)",
       },
@@ -100,6 +104,8 @@ export default function MediaDropPage() {
     const urlToExtract = (targetUrl || inputUrl).trim();
     if (!urlToExtract || isLoading) return;
     setIsLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
 
     try {
       const res = await fetch("/api/mediadrop", {
@@ -114,6 +120,7 @@ export default function MediaDropPage() {
       }
 
       setResult(data);
+      setSuccessMsg("Lossless extraction completed. Media stream resolved.");
 
       if (user && data.title) {
         saveHistoryItem(
@@ -130,7 +137,7 @@ export default function MediaDropPage() {
         ).catch((err) => console.error("MediaDrop history save failed:", err));
       }
     } catch (err: any) {
-      alert(err.message || "Extraction error. Please verify the link is public and active.");
+      setErrorMsg(err.message || "Extraction error. Please verify the link is public and active.");
     } finally {
       setIsLoading(false);
     }
@@ -281,6 +288,40 @@ export default function MediaDropPage() {
                 <span>ENGINE: HYBRID_PYTHON_NODE</span>
               </div>
             </div>
+
+            {/* Error Message Banner */}
+            {errorMsg && (
+              <div className="mt-3 p-3 bg-red-950/40 border border-red-500/30 rounded-lg flex items-start justify-between gap-3 text-red-200 text-xs font-mono animate-in fade-in duration-200">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                  <span>{errorMsg}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setErrorMsg(null)}
+                  className="text-red-400 hover:text-red-200 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* Success Message Banner */}
+            {successMsg && (
+              <div className="mt-3 p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-lg flex items-start justify-between gap-3 text-emerald-200 text-xs font-mono animate-in fade-in duration-200">
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>{successMsg}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSuccessMsg(null)}
+                  className="text-emerald-400 hover:text-emerald-200 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
         </section>
 
@@ -324,6 +365,8 @@ export default function MediaDropPage() {
                     <img
                       src={result.thumbnail || primaryMediaUrl}
                       alt={result.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-contain"
                     />
                   ) : (

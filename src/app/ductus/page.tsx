@@ -19,6 +19,8 @@ import {
   FileCode,
   Crosshair,
   Activity,
+  AlertCircle,
+  X,
 } from "lucide-react";
 
 const INITIAL_MERMAID = `graph TD
@@ -45,6 +47,7 @@ export default function DuctusPage() {
   const [mermaidCode, setMermaidCode] = useState(INITIAL_MERMAID);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   // Zoom & Pan state
@@ -127,6 +130,7 @@ export default function DuctusPage() {
     if (!promptTopic.trim() || isLoading) return;
     setIsLoading(true);
     setError(null);
+    setSuccessMsg(null);
 
     try {
       let imageBase64: string | undefined;
@@ -162,6 +166,7 @@ export default function DuctusPage() {
 
       setMermaidCode(data.mermaidCode);
       setDiagramTitle(data.title.toUpperCase().replace(/\s+/g, "_") + ".V1");
+      setSuccessMsg("Blueprint compiled and rendered into vector matrix.");
 
       if (user && data.mermaidCode) {
         saveHistoryItem(
@@ -181,6 +186,7 @@ export default function DuctusPage() {
       setPan({ x: 0, y: 0 });
     } catch (err: any) {
       setError(err.message || "Generation error");
+      setSuccessMsg(null);
     } finally {
       setIsLoading(false);
     }
@@ -417,6 +423,36 @@ export default function DuctusPage() {
             <span>SCALE: {scale.toFixed(2)}x</span>
             <span>ENGINE: MERMAID.JS</span>
           </div>
+
+          {/* Floating Success Notification */}
+          {successMsg && (
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 px-3.5 py-1.5 bg-emerald-950/80 border border-emerald-500/40 backdrop-blur rounded flex items-center space-x-2 text-emerald-200 text-xs font-mono shadow-xl animate-in fade-in">
+              <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span>{successMsg}</span>
+              <button
+                type="button"
+                onClick={() => setSuccessMsg(null)}
+                className="ml-2 text-emerald-400 hover:text-emerald-100"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
+
+          {/* Floating Error Notification */}
+          {error && (
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 px-3.5 py-1.5 bg-red-950/80 border border-red-500/40 backdrop-blur rounded flex items-center space-x-2 text-red-200 text-xs font-mono shadow-xl animate-in fade-in">
+              <AlertCircle className="w-3.5 h-3.5 text-red-400 shrink-0" />
+              <span>{error}</span>
+              <button
+                type="button"
+                onClick={() => setError(null)}
+                className="ml-2 text-red-400 hover:text-red-100"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
 
           {/* Rendered Flowchart Container */}
           <div

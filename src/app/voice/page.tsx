@@ -17,6 +17,7 @@ import {
   AlertCircle,
   Check,
   Plus,
+  X,
 } from "lucide-react";
 
 interface VoiceProfile {
@@ -93,15 +94,23 @@ export default function VoiceStudioPage() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     // Check if transferred from Text Humanizer
-    const transferred = localStorage.getItem("OVI_HUB_TRANSFER_TEXT");
+    const transferred =
+      localStorage.getItem("OVI_HUB_TRANSFER_TEXT") ||
+      sessionStorage.getItem("OVI_HUB_TRANSFER_TEXT") ||
+      sessionStorage.getItem("voice_preset_script");
+
     if (transferred) {
       setScriptText(transferred);
+      setSuccessMsg("Imported script from Text Humanizer.");
       localStorage.removeItem("OVI_HUB_TRANSFER_TEXT");
+      sessionStorage.removeItem("OVI_HUB_TRANSFER_TEXT");
+      sessionStorage.removeItem("voice_preset_script");
     }
   }, []);
 
@@ -123,6 +132,7 @@ export default function VoiceStudioPage() {
 
     setIsGenerating(true);
     setErrorMsg(null);
+    setSuccessMsg(null);
 
     try {
       const res = await fetch("/api/tts", {
@@ -147,6 +157,7 @@ export default function VoiceStudioPage() {
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       setAudioUrl(url);
+      setSuccessMsg(`Audio synthesized successfully (${selectedVoice} • 24kHz PCM). Ready for playback & download.`);
 
       if (user && scriptText) {
         saveHistoryItem(
@@ -170,7 +181,7 @@ export default function VoiceStudioPage() {
         setIsPlaying(true);
       }
     } catch (err: any) {
-      setErrorMsg(err.message || "Failed to synthesize audio.");
+      setErrorMsg(err.message || "Failed to synthesize audio. Please verify your Gemini API key.");
     } finally {
       setIsGenerating(false);
     }
@@ -249,6 +260,33 @@ export default function VoiceStudioPage() {
           </div>
         </div>
       </section>
+
+      {/* Feedback Alerts */}
+      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 pt-4 space-y-2">
+        {errorMsg && (
+          <div className="p-3.5 bg-red-950/40 border border-red-500/30 rounded flex items-center justify-between text-xs font-mono text-red-200">
+            <div className="flex items-center gap-2">
+              <AlertCircle size={15} className="text-red-400 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+            <button onClick={() => setErrorMsg(null)} className="p-1 hover:text-white">
+              <X size={14} />
+            </button>
+          </div>
+        )}
+
+        {successMsg && (
+          <div className="p-3.5 bg-emerald-950/40 border border-emerald-500/30 rounded flex items-center justify-between text-xs font-mono text-emerald-200">
+            <div className="flex items-center gap-2">
+              <Check size={15} className="text-emerald-400 shrink-0" />
+              <span>{successMsg}</span>
+            </div>
+            <button onClick={() => setSuccessMsg(null)} className="p-1 hover:text-white">
+              <X size={14} />
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* 3. Split Control Center (60/40 Desk Grid) */}
       <main className="w-full max-w-[1440px] mx-auto p-4 sm:p-6 pb-28 flex-1 grid grid-cols-12 gap-6 items-stretch">
