@@ -42,81 +42,294 @@
 
 /* =========================================================================
    Light Theme Architectural Mappings (Alabaster / Linen / Charcoal)
+   High-Contrast & Accessible Color System (WCAG AAA / AA Compliant)
    ========================================================================= */
+
+/* 1. Base Canvas & Panels (Deep Dark -> Crisp Alabaster / Linen) */
 html:not(.dark) .bg-\[\#0b0c0e\],
 html:not(.dark) .bg-\[\#0B0C0E\],
 html:not(.dark) .bg-\[\#0d0e10\],
 html:not(.dark) .bg-\[\#0D0E10\],
 html:not(.dark) .bg-\[\#121315\],
-html:not(.dark) .bg-\[\#121418\] {
+html:not(.dark) .bg-\[\#121418\],
+html.light .bg-\[\#0b0c0e\],
+html.light .bg-\[\#0B0C0E\],
+html.light .bg-\[\#0d0e10\],
+html.light .bg-\[\#0D0E10\],
+html.light .bg-\[\#121315\],
+html.light .bg-\[\#121418\] {
   background-color: #ffffff !important;
 }
 
-html:not(.dark) .bg-\[\#121418\]\/85 {
-  background-color: rgba(255, 255, 255, 0.88) !important;
+/* Translucent Headers, Navigation & Floating Hardware Docks */
+html:not(.dark) .bg-\[\#121418\]\/85,
+html:not(.dark) .bg-\[\#111215\]\/95,
+html:not(.dark) .bg-\[\#111215\]\/90,
+html:not(.dark) .bg-\[\#17191E\]\/60,
+html:not(.dark) .bg-\[\#17191E\]\/40,
+html:not(.dark) .bg-\[\#0D0E10\]\/80,
+html:not(.dark) .bg-\[\#0D0E10\]\/50,
+html:not(.dark) .bg-\[\#0D0E10\]\/40,
+html.light .bg-\[\#121418\]\/85,
+html.light .bg-\[\#111215\]\/95,
+html.light .bg-\[\#111215\]\/90,
+html.light .bg-\[\#17191E\]\/60,
+html.light .bg-\[\#17191E\]\/40,
+html.light .bg-\[\#0D0E10\]\/80,
+html.light .bg-\[\#0D0E10\]\/50,
+html.light .bg-\[\#0D0E10\]\/40 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
 }
 
+/* Secondary Panels, Card Desks & Structural Containers */
 html:not(.dark) .bg-\[\#1b1c1e\],
 html:not(.dark) .bg-\[\#1B1C1E\],
 html:not(.dark) .bg-\[\#1f2022\],
 html:not(.dark) .bg-\[\#1F2022\],
 html:not(.dark) .bg-\[\#17191E\],
-html:not(.dark) .bg-\[\#111215\] {
-  background-color: #f1efea !important;
+html:not(.dark) .bg-\[\#111215\],
+html:not(.dark) .bg-\[\#141312\],
+html:not(.dark) .bg-\[\#1B1917\],
+html:not(.dark) .bg-\[\#16181D\],
+html.light .bg-\[\#1b1c1e\],
+html.light .bg-\[\#1B1C1E\],
+html.light .bg-\[\#1f2022\],
+html.light .bg-\[\#1F2022\],
+html.light .bg-\[\#17191E\],
+html.light .bg-\[\#111215\],
+html.light .bg-\[\#141312\],
+html.light .bg-\[\#1B1917\],
+html.light .bg-\[\#16181D\] {
+  background-color: #f5f3ee !important;
 }
 
+/* Elevated, Pressed, Active & Hover Pills */
 html:not(.dark) .bg-\[\#292a2c\],
 html:not(.dark) .bg-\[\#292A2C\],
 html:not(.dark) .bg-\[\#252629\],
-html:not(.dark) .bg-\[\#343537\] {
-  background-color: #e4e0d7 !important;
+html:not(.dark) .bg-\[\#343537\],
+html.light .bg-\[\#292a2c\],
+html.light .bg-\[\#292A2C\],
+html.light .bg-\[\#252629\],
+html.light .bg-\[\#343537\] {
+  background-color: #e4decfa8 !important;
+}
+
+/* White-Opacity Badges & Hover Overlays -> Subtle Dark-Opacity in Light Mode */
+html:not(.dark) .bg-white\/5,
+html.light .bg-white\/5 {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+html:not(.dark) .bg-white\/10,
+html.light .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not(.dark) .bg-white\/20,
+html.light .bg-white\/20 {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+html:not(.dark) .bg-white\/\[0\.02\],
+html.light .bg-white\/\[0\.02\] {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+html:not(.dark) .bg-white\/\[0\.03\],
+html.light .bg-white\/\[0\.03\] {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+html:not(.dark) .bg-white\/\[0\.06\],
+html.light .bg-white\/\[0\.06\] {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+html:not(.dark) .hover\:bg-white\/5:hover,
+html.light .hover\:bg-white\/5:hover {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not(.dark) .hover\:bg-white\/\[0\.02\]:hover,
+html.light .hover\:bg-white\/\[0\.02\]:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 2. Primary Typography (Headings, Active Presets, Voice Names) */
+html:not(.dark) .text-white,
+html.light .text-white {
+  color: #121316 !important;
 }
 
 html:not(.dark) .text-\[\#e3e2e5\],
-html:not(.dark) .text-\[\#EDEAE5\] {
-  color: #18191c !important;
+html:not(.dark) .text-\[\#EDEAE5\],
+html:not(.dark) .text-\[\#E3E2E5\],
+html.light .text-\[\#e3e2e5\],
+html.light .text-\[\#EDEAE5\],
+html.light .text-\[\#E3E2E5\] {
+  color: #151619 !important;
 }
 
-html:not(.dark) .text-\[\#969087\],
-html:not(.dark) .text-\[\#7A7E85\] {
-  color: #615e57 !important;
-}
-
+/* 3. Secondary Text (Subtitles, Card Descriptions, Body Copy) */
 html:not(.dark) .text-\[\#cdc6bb\],
 html:not(.dark) .text-\[\#CDC6BB\],
-html:not(.dark) .text-\[\#CDC6BC\] {
-  color: #3b3934 !important;
+html:not(.dark) .text-\[\#CDC6BC\],
+html:not(.dark) .text-\[\#A89F91\],
+html.light .text-\[\#cdc6bb\],
+html.light .text-\[\#CDC6BB\],
+html.light .text-\[\#CDC6BC\],
+html.light .text-\[\#A89F91\] {
+  color: #38342e !important;
 }
 
+/* 4. Labels, Metadata, Mono Specs, Timestamps */
+html:not(.dark) .text-\[\#969087\],
+html:not(.dark) .text-\[\#7A7E85\],
+html:not(.dark) .text-\[\#4A463F\],
+html.light .text-\[\#969087\],
+html.light .text-\[\#7A7E85\],
+html.light .text-\[\#4A463F\] {
+  color: #524d45 !important;
+}
+
+/* 5. Accessible Atelier Accents (Deep Warm Sienna/Bronze with WCAG Contrast > 5.5:1) */
+html:not(.dark) .text-\[\#C89B6D\],
+html:not(.dark) .text-\[\#c89b6d\],
+html.light .text-\[\#C89B6D\],
+html.light .text-\[\#c89b6d\] {
+  color: #8c4e16 !important;
+}
+
+html:not(.dark) .text-\[\#B88A76\],
+html:not(.dark) .text-\[\#b88a76\],
+html.light .text-\[\#B88A76\],
+html.light .text-\[\#b88a76\] {
+  color: #9c3f1e !important;
+}
+
+html:not(.dark) .text-\[\#9E988E\],
+html:not(.dark) .text-\[\#9e988e\],
+html.light .text-\[\#9E988E\],
+html.light .text-\[\#9e988e\] {
+  color: #575247 !important;
+}
+
+/* Amber Indicator Badges, Progress Bars & Pip Highlights */
+html:not(.dark) .bg-\[\#C89B6D\],
+html.light .bg-\[\#C89B6D\] {
+  background-color: #9e5b1d !important;
+}
+
+html:not(.dark) .hover\:bg-\[\#d8ab7d\]:hover,
+html.light .hover\:bg-\[\#d8ab7d\]:hover {
+  background-color: #b56b26 !important;
+}
+
+/* Buttons with Amber Background Keep Crisp White Text */
+html:not(.dark) button.bg-\[\#C89B6D\],
+html:not(.dark) a.bg-\[\#C89B6D\],
+html:not(.dark) .bg-\[\#C89B6D\].text-\[\#0B0C0E\],
+html:not(.dark) .bg-\[\#C89B6D\] .text-\[\#0B0C0E\],
+html.light button.bg-\[\#C89B6D\],
+html.light a.bg-\[\#C89B6D\],
+html.light .bg-\[\#C89B6D\].text-\[\#0B0C0E\],
+html.light .bg-\[\#C89B6D\] .text-\[\#0B0C0E\] {
+  color: #ffffff !important;
+}
+
+/* 6. Hover States: ensure text doesn't turn white on hover in light mode */
+html:not(.dark) .hover\:text-white:hover,
+html:not(.dark) .group:hover .group-hover\:text-white,
+html.light .hover\:text-white:hover,
+html.light .group:hover .group-hover\:text-white {
+  color: #000000 !important;
+}
+
+html:not(.dark) .hover\:text-\[\#e3e2e5\]:hover,
+html:not(.dark) .hover\:text-\[\#EDEAE5\]:hover,
+html.light .hover\:text-\[\#e3e2e5\]:hover,
+html.light .hover\:text-\[\#EDEAE5\]:hover {
+  color: #000000 !important;
+}
+
+/* 7. Structural Hairline Borders */
 html:not(.dark) .border-white\/\[0\.07\],
 html:not(.dark) .border-white\/\[0\.08\],
 html:not(.dark) .border-white\/\[0\.06\],
+html:not(.dark) .border-white\/5,
 html:not(.dark) .border-white\/10,
+html:not(.dark) .border-white\/15,
 html:not(.dark) .border-white\/20,
-html:not(.dark) .border-\[\#4A463F\]\/30,
+html:not(.dark) .border-white\/\[0\.02\],
+html:not(.dark) .border-\[\#4A463F\]\/15,
 html:not(.dark) .border-\[\#4A463F\]\/20,
-html:not(.dark) .border-\[\#4A463F\]\/40 {
-  border-color: rgba(0, 0, 0, 0.09) !important;
+html:not(.dark) .border-\[\#4A463F\]\/30,
+html:not(.dark) .border-\[\#4A463F\]\/40,
+html:not(.dark) .border-\[\#4A463F\]\/60,
+html:not(.dark) .border-\[\#4A463F\],
+html.light .border-white\/\[0\.07\],
+html.light .border-white\/\[0\.08\],
+html.light .border-white\/\[0\.06\],
+html.light .border-white\/5,
+html.light .border-white\/10,
+html.light .border-white\/15,
+html.light .border-white\/20,
+html.light .border-white\/\[0\.02\],
+html.light .border-\[\#4A463F\]\/15,
+html.light .border-\[\#4A463F\]\/20,
+html.light .border-\[\#4A463F\]\/30,
+html.light .border-\[\#4A463F\]\/40,
+html.light .border-\[\#4A463F\]\/60,
+html.light .border-\[\#4A463F\] {
+  border-color: rgba(0, 0, 0, 0.12) !important;
 }
 
 html:not(.dark) .hairline-border,
 html:not(.dark) .hairline-b,
 html:not(.dark) .hairline-t,
 html:not(.dark) .hairline-l,
-html:not(.dark) .hairline-r {
-  border-color: rgba(0, 0, 0, 0.08) !important;
+html:not(.dark) .hairline-r,
+html.light .hairline-border,
+html.light .hairline-b,
+html.light .hairline-t,
+html.light .hairline-l,
+html.light .hairline-r {
+  border-color: rgba(0, 0, 0, 0.11) !important;
 }
 
-html:not(.dark) ::-webkit-scrollbar-track {
-  background: #f7f6f3;
+/* Selected Voice Card & Active Item Borders */
+html:not(.dark) .border-\[\#C89B6D\]\/60,
+html.light .border-\[\#C89B6D\]\/60 {
+  border-color: #9e5b1d !important;
+  box-shadow: 0 0 0 1px #9e5b1d inset;
 }
 
-html:not(.dark) ::-webkit-scrollbar-thumb {
-  background: #d8d4cc;
+/* 8. Form Controls, Range Sliders, Inputs & Placeholders */
+html:not(.dark) input[type="range"],
+html.light input[type="range"] {
+  accent-color: #9e5b1d !important;
 }
 
-html:not(.dark) ::-webkit-scrollbar-thumb:hover {
-  background: #bcbaa0;
+html:not(.dark) input[type="range"]::-webkit-slider-runnable-track,
+html.light input[type="range"]::-webkit-slider-runnable-track {
+  background: #ded8cb !important;
+}
+
+html:not(.dark) ::placeholder,
+html.light ::placeholder {
+  color: rgba(0, 0, 0, 0.45) !important;
+}
+
+html:not(.dark) .placeholder-white\/20::placeholder,
+html.light .placeholder-white\/20::placeholder {
+  color: rgba(0, 0, 0, 0.45) !important;
+}
+
+html:not(.dark) .focus-within\:border-\[\#CDC6BB\]:focus-within,
+html.light .focus-within\:border-\[\#CDC6BB\]:focus-within {
+  border-color: #9e5b1d !important;
+}
+
+/* 9. Active Navigation Item Indicator */
+html:not(.dark) nav a.border-\[\#9E988E\],
+html.light nav a.border-\[\#9E988E\] {
+  border-color: #9e5b1d !important;
+  color: #121316 !important;
+  font-weight: 600;
 }
 
 .material-symbols-outlined {
