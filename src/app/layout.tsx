@@ -9,8 +9,6 @@ import SettingsModal from "@/components/SettingsModal";
 import { AuthModal } from "@/components/AuthModal";
 import { Analytics } from "@vercel/analytics/next";
 
-import Footer from "@/components/Footer";
-
 const syne = Syne({
   subsets: ["latin"],
   weight: ["500", "600", "700", "800"],
@@ -111,7 +109,6 @@ export default function RootLayout({
               <div className="pt-12 flex-1 flex flex-col w-full max-w-full overflow-x-hidden">
                 {children}
               </div>
-              <Footer />
               <SettingsModal />
               <AuthModal />
             </AuthProvider>

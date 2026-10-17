@@ -12,6 +12,7 @@ import {
   Compass,
 } from "lucide-react";
 import OviLogo from "@/components/OviLogo";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "404 — Route Not Found",
@@ -29,7 +30,8 @@ export default function NotFound() {
   ];
 
   return (
-    <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 sm:px-6 py-12 md:py-20 flex flex-col justify-center items-center text-center">
+    <>
+      <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 sm:px-6 py-12 md:py-20 flex flex-col justify-center items-center text-center">
       
       {/* Visual Monogram Pip */}
       <div className="mb-6 p-4 bg-[#121418] border border-white/10 rounded-full shadow-2xl relative">
@@ -94,6 +96,8 @@ export default function NotFound() {
         </div>
       </section>
 
-    </main>
+      </main>
+      <Footer />
+    </>
   );
 }

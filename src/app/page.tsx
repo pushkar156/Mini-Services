@@ -15,6 +15,7 @@ import {
   ArrowRight,
   ShieldCheck,
 } from "lucide-react";
+import Footer from "@/components/Footer";
 
 const SERVICES = [
   {
@@ -89,7 +90,8 @@ export default function AtelierHubPage() {
   const { isConfigured, provider, ollamaModel } = useApiKey();
 
   return (
-    <main className="flex-1 w-full max-w-[1440px] mx-auto pt-6 pb-12 px-4 sm:px-6 md:px-8 flex flex-col justify-between">
+    <>
+      <main className="flex-1 w-full max-w-[1440px] mx-auto pt-6 pb-12 px-4 sm:px-6 md:px-8 flex flex-col justify-between">
       
       {/* Top Architectural Hero Header */}
       <section className="mt-4 mb-8 pb-8 hairline-b flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -232,7 +234,8 @@ export default function AtelierHubPage() {
           <span>STITCH UI SPEC: 13115693836351847259 // VERIFIED</span>
         </div>
       </footer>
-
     </main>
-  );
+    <Footer />
+  </>
+);
 }

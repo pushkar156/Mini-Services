@@ -373,7 +373,7 @@ By breaking machine symmetry and varying syntactic weights, the text regains its
                 <span className="font-mono text-sm md:text-base font-semibold text-[#EDEAE5]">Organic</span>
                 <span className="font-mono text-[11px] text-[#CDC6BB]">(88/100)</span>
               </div>
-              <span className="text-[10px] text-[#4A463F] mt-0.5">Statistical randomness restored</span>
+              <span className="text-[10px] text-[#969087] mt-0.5">Statistical randomness restored</span>
             </div>
 
             <div className="p-3 bg-[#1B1C1E] border border-[#4A463F]/25 rounded flex flex-col justify-between">
@@ -384,7 +384,7 @@ By breaking machine symmetry and varying syntactic weights, the text regains its
                 <span className="font-mono text-sm md:text-base font-semibold text-[#EDEAE5]">84%</span>
                 <span className="font-mono text-[11px] text-[#EDEAE5]/60">High Variance</span>
               </div>
-              <span className="text-[10px] text-[#4A463F] mt-0.5">Sentence rhythm varied naturally</span>
+              <span className="text-[10px] text-[#969087] mt-0.5">Sentence rhythm varied naturally</span>
             </div>
 
             <div className="p-3 bg-[#1B1C1E] border border-[#4A463F]/25 rounded flex flex-col justify-between">
@@ -397,7 +397,7 @@ By breaking machine symmetry and varying syntactic weights, the text regains its
                 </span>
                 <span className="font-mono text-[11px] text-[#B88A76]">Synthetic Markers</span>
               </div>
-              <span className="text-[10px] text-[#4A463F] mt-0.5">delve, testament, tapestry</span>
+              <span className="text-[10px] text-[#969087] mt-0.5">delve, testament, tapestry</span>
             </div>
           </div>
 

@@ -418,7 +418,7 @@ export default function DuctusPage() {
           }}
         >
           {/* Coordinates HUD */}
-          <div className="absolute top-3 left-4 text-[#4A463F] font-mono text-[10px] pointer-events-none tracking-widest flex items-center space-x-4 z-10">
+          <div className="absolute top-3 left-4 text-[#7A7E85] font-mono text-[10px] pointer-events-none tracking-widest flex items-center space-x-4 z-10">
             <span>X: {pan.x.toFixed(1)} Y: {pan.y.toFixed(1)}</span>
             <span>SCALE: {scale.toFixed(2)}x</span>
             <span>ENGINE: MERMAID.JS</span>

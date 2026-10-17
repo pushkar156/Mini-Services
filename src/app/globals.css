@@ -41,6 +41,36 @@
 }
 
 /* =========================================================================
+   Dark Theme Architectural Contrast Tuning (Braun Hi-Fi / Deep Obsidian)
+   ========================================================================= */
+html.dark input[type="range"] {
+  accent-color: #C89B6D;
+}
+
+html.dark input[type="range"]::-webkit-slider-runnable-track {
+  background: #1c1d20;
+}
+
+html.dark .placeholder-white\/20::placeholder,
+html.dark ::placeholder {
+  color: rgba(227, 226, 229, 0.4) !important;
+}
+
+html.dark .border-\[\#C89B6D\]\/60 {
+  border-color: rgba(200, 155, 109, 0.75) !important;
+  box-shadow: 0 0 10px rgba(200, 155, 109, 0.12);
+}
+
+html.dark .bg-\[\#292a2c\].border-white\/10 {
+  border-color: rgba(200, 155, 109, 0.4) !important;
+}
+
+html.dark input:focus,
+html.dark textarea:focus {
+  border-color: #CDC6BB !important;
+}
+
+/* =========================================================================
    Light Theme Architectural Mappings (Alabaster / Linen / Charcoal)
    High-Contrast & Accessible Color System (WCAG AAA / AA Compliant)
    ========================================================================= */
