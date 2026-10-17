@@ -32,11 +32,11 @@ import OviLogo from "./OviLogo";
 
 const SERVICES = [
   { id: "hub", name: "Hub", title: "The Atelier Directory", href: "/", icon: Home, desc: "Overview of creative engines" },
-  { id: "voice", name: "Voice", title: "Voice Studio", href: "/voice", icon: Mic, desc: "Braun Hi-Fi audio console" },
-  { id: "humanizer", name: "Humanizer", title: "Text Humanizer", href: "/humanizer", icon: FileEdit, desc: "Japanese editorial press" },
-  { id: "ductus", name: "Ductus", title: "Ductus CAD", href: "/ductus", icon: Network, desc: "Architectural blueprint diagrams" },
-  { id: "ident", name: "Ident", title: "Ident Naming", href: "/ident", icon: Fingerprint, desc: "Haute couture brand atelier" },
-  { id: "mediadrop", name: "MediaDrop", title: "MediaDrop", href: "/mediadrop", icon: CloudDownload, desc: "Nordic glacier vault client streamer" },
+  { id: "voice", name: "Voice Converter", title: "Voice Studio", href: "/voice", icon: Mic, desc: "Braun Hi-Fi audio console" },
+  { id: "humanizer", name: "Text Humanizer", title: "Text Humanizer", href: "/humanizer", icon: FileEdit, desc: "Japanese editorial press" },
+  { id: "ductus", name: "Flowchart Generator", title: "Ductus CAD", href: "/ductus", icon: Network, desc: "Architectural blueprint diagrams" },
+  { id: "ident", name: "Brand Naming", title: "Ident Naming", href: "/ident", icon: Fingerprint, desc: "Haute couture brand atelier" },
+  { id: "mediadrop", name: "Media Downloader", title: "MediaDrop", href: "/mediadrop", icon: CloudDownload, desc: "Nordic glacier vault client streamer" },
   { id: "photonarrator", name: "PhotoNarrator", title: "PhotoNarrator", href: "/photonarrator", icon: Camera, desc: "Cine-silver darkroom prose" },
 ];
 
@@ -79,14 +79,14 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Navigation (visible on xl screens) */}
-            <nav className="hidden xl:flex items-center space-x-5">
+            <nav className="hidden xl:flex items-center space-x-3 2xl:space-x-5">
               {SERVICES.map((s) => {
                 const active = getIsActive(s.href);
                 return (
                   <Link
                     key={s.id}
                     href={s.href}
-                    className={`font-mono text-xs uppercase tracking-wider transition-colors duration-150 ${
+                    className={`font-mono text-[11px] 2xl:text-xs uppercase tracking-wider whitespace-nowrap transition-colors duration-150 ${
                       active
                         ? "text-white border-b border-[#9E988E] pb-0.5"
                         : "text-[#7A7E85] hover:text-[#e3e2e5]"
