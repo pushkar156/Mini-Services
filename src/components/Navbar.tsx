@@ -33,11 +33,12 @@ export default function Navbar() {
     return pathname.startsWith(href);
   };
 
-  // Structured CardNav items organized logically into Atelier studios
+  // Option 1: Consolidated Studio Engines (Card 1) + Platform & Setup (Card 2) + Trust & Atelier (Card 3)
   const navItems: CardNavItem[] = [
     {
-      label: "Audio & Lexicon",
-      description: "Acoustic analog modeling and human lexical balance.",
+      label: "Studio Engines",
+      description: "Consolidated creative AI toolbelt for audio, syntax, architecture, and brand.",
+      columns: 2,
       links: [
         {
           label: "Voice Converter",
@@ -51,12 +52,6 @@ export default function Navbar() {
           ariaLabel: "Open Text Humanizer",
           isActive: getIsActive("/humanizer"),
         },
-      ],
-    },
-    {
-      label: "Architecture & Optics",
-      description: "Logic diagram blueprints and darkroom prose interpretation.",
-      links: [
         {
           label: "Flowchart Generator",
           href: "/ductus",
@@ -69,12 +64,6 @@ export default function Navbar() {
           ariaLabel: "Open PhotoNarrator",
           isActive: getIsActive("/photonarrator"),
         },
-      ],
-    },
-    {
-      label: "Brand & Utilities",
-      description: "Haute couture brand generation and vault client extraction.",
-      links: [
         {
           label: "Brand Naming",
           href: "/ident",
@@ -87,11 +76,53 @@ export default function Navbar() {
           ariaLabel: "Open Media Downloader",
           isActive: getIsActive("/mediadrop"),
         },
+      ],
+    },
+    {
+      label: "Platform & Setup",
+      description: "Engine directory, BYOK key configuration, and local neural daemons.",
+      links: [
         {
           label: "Hub Directory",
           href: "/",
-          ariaLabel: "Open Atelier Hub",
+          ariaLabel: "Open Atelier Hub Directory",
           isActive: pathname === "/",
+        },
+        {
+          label: "BYOK & Ollama Setup",
+          onClick: () => openModal(),
+          ariaLabel: "Configure API Keys and Local Models",
+        },
+        {
+          label: "Model Diagnostics",
+          onClick: () => openModal(),
+          ariaLabel: "View Model Engine Diagnostics",
+        },
+        {
+          label: "GitHub Monorepo",
+          href: "https://github.com/pushkar156/Mini-Services",
+          ariaLabel: "Open GitHub Monorepo",
+        },
+      ],
+    },
+    {
+      label: "Trust & Atelier",
+      description: "Timeline history archives, privacy manifestos, and studio dispatch.",
+      links: [
+        {
+          label: "Timeline Archive",
+          onClick: () => setHistoryOpen(true),
+          ariaLabel: "Open Execution History Drawer",
+        },
+        {
+          label: "Client-Side Vault",
+          onClick: () => openModal(),
+          ariaLabel: "Zero-Retention Client Storage",
+        },
+        {
+          label: "Email Atelier",
+          href: "mailto:support@oviatelier.dev",
+          ariaLabel: "Contact Atelier Studio",
         },
       ],
     },
@@ -125,7 +156,7 @@ export default function Navbar() {
             closeLabel="Close"
             speed={1}
             barHeight={54}
-            cardHeight={176}
+            cardHeight={184}
             maxWidth={1440}
             radius={20}
             inset={7}

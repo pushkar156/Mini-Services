@@ -20,6 +20,9 @@ export interface CardNavLink {
   href?: string;
   ariaLabel?: string;
   isActive?: boolean;
+  target?: string;
+  rel?: string;
+  onClick?: (event: ReactMouseEvent<HTMLElement>) => void;
 }
 
 export interface CardNavItem {
@@ -28,6 +31,7 @@ export interface CardNavItem {
   bgColor?: string;
   textColor?: string;
   links?: CardNavLink[];
+  columns?: 1 | 2;
 }
 
 export interface CardNavCta {
@@ -155,7 +159,7 @@ const DESCRIPTION =
 const LINKS =
   'm-0 mt-auto flex list-none flex-col gap-[3px] p-0 group-data-[narrow]/cn:flex-row group-data-[narrow]/cn:flex-wrap group-data-[narrow]/cn:gap-x-[16px] group-data-[narrow]/cn:gap-y-[3px]';
 const LINK =
-  'group/link inline-flex cursor-pointer items-center gap-[8px] rounded-[6px] border-0 px-0 py-[2.5px] [background:none] font-mono text-[11px] sm:text-[12px] uppercase tracking-wider text-inherit no-underline opacity-[0.85] outline-none transition-all duration-200 ease-[ease] hover:opacity-100 hover:text-[var(--cn-ring)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)]';
+  'group/link inline-flex cursor-pointer items-center text-left gap-[8px] rounded-[6px] border-0 px-0 py-[2.5px] [background:none] font-mono text-[11px] sm:text-[12px] uppercase tracking-wider text-inherit no-underline opacity-[0.85] outline-none transition-all duration-200 ease-[ease] hover:opacity-100 hover:text-[var(--cn-ring)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)]';
 const ARROW = 'relative inline-block h-[14px] w-[14px] flex-none overflow-hidden';
 const ARROW_OUT =
   'absolute inset-0 h-full w-full transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/link:translate-x-[110%] group-hover/link:-translate-y-[110%] group-focus-visible/link:translate-x-[110%] group-focus-visible/link:-translate-y-[110%] motion-reduce:transition-none';
@@ -498,8 +502,12 @@ const CardNav = ({
         </button>
       );
     }
+    const isExternal = typeof target.href === 'string' && target.href.startsWith('http');
+    const targetAttr = 'target' in target && target.target ? target.target : isExternal ? '_blank' : undefined;
+    const relAttr = 'rel' in target && target.rel ? target.rel : isExternal ? 'noopener noreferrer' : undefined;
+
     return (
-      <LinkComponent href={target.href} {...props}>
+      <LinkComponent href={target.href} target={targetAttr} rel={relAttr} {...props}>
         {children}
       </LinkComponent>
     );
@@ -588,7 +596,7 @@ const CardNav = ({
                   <span className={LABEL}>{item.label}</span>
                   {item.description && <p className={DESCRIPTION}>{item.description}</p>}
                 </div>
-                <ul className={LINKS}>
+                <ul className={item.columns === 2 ? `${LINKS} grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1` : LINKS}>
                   {(item.links ?? []).map((link, linkIndex) => (
                     <li key={`${link.label}-${linkIndex}`}>
                       {anchor(
@@ -598,6 +606,7 @@ const CardNav = ({
                           'aria-label': link.ariaLabel,
                           tabIndex: open ? undefined : -1,
                           onClick: event => {
+                            link.onClick?.(event);
                             onLinkClick?.(link, item, event);
                             setOpen(false);
                           }
