@@ -110,7 +110,7 @@ export default function AtelierHubPage() {
         </div>
 
         {/* Right System Status Node Capsule */}
-        <div className="bg-[#1f2022] border border-white/[0.08] p-4 flex flex-col space-y-2.5 min-w-[280px] self-start md:self-end">
+        <div id="telemetry" className="bg-[#1f2022] border border-white/[0.08] p-4 flex flex-col space-y-2.5 min-w-[280px] self-start md:self-end">
           <div className="flex items-center justify-between font-mono text-[11px] text-[#969087] border-b border-white/[0.06] pb-2">
             <span>PIPELINE TELEMETRY</span>
             <span className="text-[#cdc6bb] font-mono text-xs">LOCAL-FIRST</span>

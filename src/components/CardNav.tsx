@@ -32,6 +32,7 @@ export interface CardNavItem {
   textColor?: string;
   links?: CardNavLink[];
   columns?: 1 | 2;
+  flex?: number | string;
 }
 
 export interface CardNavCta {
@@ -130,12 +131,12 @@ const RIM =
 const BAR =
   'relative z-[2] box-border flex h-[var(--cn-bar)] items-center justify-between px-[var(--cn-inset)]';
 const MENU =
-  'inline-flex h-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] cursor-pointer items-center gap-[9px] rounded-[calc(var(--cn-radius)_-_var(--cn-inset))] border border-white/10 dark:border-white/10 light:border-black/10 px-[12px] bg-white/[0.04] dark:bg-white/[0.04] font-mono text-[11px] uppercase tracking-wider font-semibold text-[var(--cn-text)] outline-none transition-all duration-200 ease-[ease] hover:bg-white/[0.08] hover:border-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)] data-[icon-only]:w-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] data-[icon-only]:justify-center data-[icon-only]:p-0';
+  'inline-flex h-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] cursor-pointer items-center gap-[9px] rounded-[var(--cn-inner-radius)] border border-white/10 dark:border-white/10 light:border-black/10 px-[12px] bg-white/[0.04] dark:bg-white/[0.04] font-mono text-[11px] uppercase tracking-wider font-semibold text-[var(--cn-text)] outline-none transition-all duration-200 ease-[ease] hover:bg-white/[0.08] hover:border-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)] data-[icon-only]:w-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] data-[icon-only]:justify-center data-[icon-only]:p-0';
 const BURGER = 'relative h-[12px] w-[18px]';
 const LINE_TOP =
-  'absolute left-0 top-[2.25px] h-[1.5px] w-full rounded-[2px] bg-current transition-[top,rotate] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[open]/cn:top-[5.25px] group-data-[open]/cn:rotate-45 motion-reduce:transition-none';
+  'absolute left-0 top-[2.25px] h-[1.5px] w-full bg-current transition-[top,rotate] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[open]/cn:top-[5.25px] group-data-[open]/cn:rotate-45 motion-reduce:transition-none';
 const LINE_BOTTOM =
-  'absolute left-0 top-[8.25px] h-[1.5px] w-full rounded-[2px] bg-current transition-[top,rotate] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[open]/cn:top-[5.25px] group-data-[open]/cn:-rotate-45 motion-reduce:transition-none';
+  'absolute left-0 top-[8.25px] h-[1.5px] w-full bg-current transition-[top,rotate] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[open]/cn:top-[5.25px] group-data-[open]/cn:-rotate-45 motion-reduce:transition-none';
 const MENU_LABEL = 'relative inline-grid overflow-hidden';
 const WORD_OPEN =
   '[grid-area:1/1] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[open]/cn:-translate-y-[110%] motion-reduce:transition-none';
@@ -144,14 +145,14 @@ const WORD_CLOSE =
 const LOGO =
   'inline-flex items-center text-[var(--cn-text)] no-underline outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)]';
 const CTA =
-  'inline-flex h-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] justify-self-end cursor-pointer items-center justify-center whitespace-nowrap rounded-[calc(var(--cn-radius)_-_var(--cn-inset))] border-0 px-[16px] [background:var(--cn-cta)] [box-shadow:var(--cn-cta-shadow)] [font-family:inherit] [font-size:inherit] font-semibold text-[var(--cn-cta-ink)] no-underline outline-none transition-[filter] duration-200 ease-[ease] hover:[filter:var(--cn-cta-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)]';
+  'inline-flex h-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] justify-self-end cursor-pointer items-center justify-center whitespace-nowrap rounded-[var(--cn-inner-radius)] border-0 px-[16px] [background:var(--cn-cta)] [box-shadow:var(--cn-cta-shadow)] [font-family:inherit] [font-size:inherit] font-semibold text-[var(--cn-cta-ink)] no-underline outline-none transition-[filter] duration-200 ease-[ease] hover:[filter:var(--cn-cta-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)]';
 const CTA_WIDE =
-  'flex h-[44px] w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-[calc(var(--cn-radius)_-_var(--cn-inset))] border-0 px-[16px] [background:var(--cn-cta)] [box-shadow:var(--cn-cta-shadow)] [font-family:inherit] [font-size:inherit] font-semibold text-[var(--cn-cta-ink)] no-underline outline-none transition-[filter] duration-200 ease-[ease] hover:[filter:var(--cn-cta-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)]';
+  'flex h-[44px] w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-[var(--cn-inner-radius)] border-0 px-[16px] [background:var(--cn-cta)] [box-shadow:var(--cn-cta-shadow)] [font-family:inherit] [font-size:inherit] font-semibold text-[var(--cn-cta-ink)] no-underline outline-none transition-[filter] duration-200 ease-[ease] hover:[filter:var(--cn-cta-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)]';
 const CONTENT =
   'invisible absolute inset-x-0 top-[var(--cn-bar)] box-border flex flex-col gap-[var(--cn-gap)] px-[var(--cn-inset)] pb-[var(--cn-inset)] [perspective:900px] group-data-[shown]/cn:visible';
 const CARDS = 'flex gap-[var(--cn-gap)] group-data-[narrow]/cn:flex-col';
 const CARD =
-  'group/card relative box-border flex min-h-[var(--cn-card)] min-w-0 flex-[1_1_0] origin-top flex-col gap-[18px] rounded-[calc(var(--cn-radius)_-_var(--cn-inset))] px-[16px] pb-[14px] pt-[16px] [background:var(--cn-tile)] [box-shadow:var(--cn-tile-rim)] text-[var(--cn-text)] will-change-[transform,opacity] data-[tinted]:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.16),0_4px_10px_-4px_rgba(0,0,0,0.45)] group-data-[narrow]/cn:min-h-0 group-data-[narrow]/cn:flex-none group-data-[narrow]/cn:gap-[10px] group-data-[narrow]/cn:px-[14px] group-data-[narrow]/cn:pb-[12px] group-data-[narrow]/cn:pt-[14px]';
+  'group/card relative box-border flex min-h-[var(--cn-card)] min-w-0 flex-[1_1_0] origin-top flex-col gap-[18px] rounded-[var(--cn-inner-radius)] px-[16px] pb-[14px] pt-[16px] [background:var(--cn-tile)] [box-shadow:var(--cn-tile-rim)] text-[var(--cn-text)] will-change-[transform,opacity] data-[tinted]:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.16),0_4px_10px_-4px_rgba(0,0,0,0.45)] group-data-[narrow]/cn:min-h-0 group-data-[narrow]/cn:flex-none group-data-[narrow]/cn:gap-[10px] group-data-[narrow]/cn:px-[14px] group-data-[narrow]/cn:pb-[12px] group-data-[narrow]/cn:pt-[14px]';
 const CARD_HEAD = 'flex flex-col gap-[4px]';
 const LABEL = 'text-[15px] sm:text-[16px] font-sans font-bold tracking-tight text-[var(--cn-text)]';
 const DESCRIPTION =
@@ -159,7 +160,7 @@ const DESCRIPTION =
 const LINKS =
   'm-0 mt-auto flex list-none flex-col gap-[3px] p-0 group-data-[narrow]/cn:flex-row group-data-[narrow]/cn:flex-wrap group-data-[narrow]/cn:gap-x-[16px] group-data-[narrow]/cn:gap-y-[3px]';
 const LINK =
-  'group/link inline-flex cursor-pointer items-center text-left gap-[8px] rounded-[6px] border-0 px-0 py-[2.5px] [background:none] font-mono text-[11px] sm:text-[12px] uppercase tracking-wider text-inherit no-underline opacity-[0.85] outline-none transition-all duration-200 ease-[ease] hover:opacity-100 hover:text-[var(--cn-ring)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)]';
+  'group/link inline-flex cursor-pointer items-center text-left gap-[8px] rounded-none border-0 px-0 py-[2.5px] [background:none] font-mono text-[11px] sm:text-[12px] uppercase tracking-wider text-inherit no-underline opacity-[0.85] outline-none transition-all duration-200 ease-[ease] hover:opacity-100 hover:text-[var(--cn-ring)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)]';
 const ARROW = 'relative inline-block h-[14px] w-[14px] flex-none overflow-hidden';
 const ARROW_OUT =
   'absolute inset-0 h-full w-full transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/link:translate-x-[110%] group-hover/link:-translate-y-[110%] group-focus-visible/link:translate-x-[110%] group-focus-visible/link:-translate-y-[110%] motion-reduce:transition-none';
@@ -291,6 +292,7 @@ const CardNav = ({
     '--cn-inset': `${inset}px`,
     '--cn-gap': '8px',
     '--cn-radius': `${radius}px`,
+    '--cn-inner-radius': `${Math.max(0, radius - inset)}px`,
     '--cn-logo': '24px',
     '--cn-card': `${cardHeight}px`
   };
@@ -458,11 +460,13 @@ const CardNav = ({
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
     const width = panel.offsetWidth;
     const height = panel.offsetHeight;
-    const radius = parseFloat(getComputedStyle(panel).borderTopLeftRadius) || 18;
+    const rawRadius = parseFloat(getComputedStyle(panel).borderTopLeftRadius);
+    const radiusVal = Number.isNaN(rawRadius) ? 0 : rawRadius;
+    const startRound = radiusVal === 0 ? 0 : Math.min(height / 2, radiusVal);
     const anim = panel.animate(
       [
-        { clipPath: `inset(0px ${Math.max(0, (width - height) / 2)}px round ${height / 2}px)`, opacity: 0 },
-        { clipPath: `inset(0px 0px round ${radius}px)`, opacity: 1 }
+        { clipPath: `inset(0px ${Math.max(0, (width - height) / 2)}px round ${startRound}px)`, opacity: 0 },
+        { clipPath: `inset(0px 0px round ${radiusVal}px)`, opacity: 1 }
       ],
       { duration: 820, easing: EASE_OUT, fill: 'backwards' }
     );
@@ -590,7 +594,10 @@ const CardNav = ({
                 }}
                 className={CARD}
                 data-tinted={item.bgColor ? '' : undefined}
-                style={item.bgColor ? { background: item.bgColor, color: item.textColor } : undefined}
+                style={{
+                  ...(item.bgColor ? { background: item.bgColor, color: item.textColor } : {}),
+                  ...(item.flex && !narrow ? { flex: typeof item.flex === 'number' ? `${item.flex} 1 0%` : item.flex } : {})
+                }}
               >
                 <div className={CARD_HEAD}>
                   <span className={LABEL}>{item.label}</span>

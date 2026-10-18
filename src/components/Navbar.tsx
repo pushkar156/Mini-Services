@@ -33,12 +33,13 @@ export default function Navbar() {
     return pathname.startsWith(href);
   };
 
-  // Option 1: Consolidated Studio Engines (Card 1) + Platform & Setup (Card 2) + Trust & Atelier (Card 3)
+  // CardNav items with responsive flex weighting: Studio Engines has expanded flex for its 2-column layout
   const navItems: CardNavItem[] = [
     {
       label: "Studio Engines",
       description: "Consolidated creative AI toolbelt for audio, syntax, architecture, and brand.",
       columns: 2,
+      flex: 1.8,
       links: [
         {
           label: "Voice Converter",
@@ -80,49 +81,58 @@ export default function Navbar() {
     },
     {
       label: "Platform & Setup",
-      description: "Engine directory, BYOK key configuration, and local neural daemons.",
+      description: "Workspace orientation, display settings, and system telemetry.",
+      flex: 1,
       links: [
         {
-          label: "Hub Directory",
+          label: "Home",
           href: "/",
-          ariaLabel: "Open Atelier Hub Directory",
+          ariaLabel: "Return to Atelier Home",
           isActive: pathname === "/",
         },
         {
-          label: "BYOK & Ollama Setup",
-          onClick: () => openModal(),
-          ariaLabel: "Configure API Keys and Local Models",
+          label: theme === "dark" ? "Light Mode" : "Dark Mode",
+          onClick: () => toggleTheme(),
+          ariaLabel: "Toggle Interface Theme",
         },
         {
-          label: "Model Diagnostics",
-          onClick: () => openModal(),
-          ariaLabel: "View Model Engine Diagnostics",
-        },
-        {
-          label: "GitHub Monorepo",
-          href: "https://github.com/pushkar156/Mini-Services",
-          ariaLabel: "Open GitHub Monorepo",
+          label: "System Telemetry",
+          href: "/#telemetry",
+          ariaLabel: "View System Telemetry Node",
         },
       ],
     },
     {
       label: "Trust & Atelier",
-      description: "Timeline history archives, privacy manifestos, and studio dispatch.",
+      description: "Studio pedigree, account profile, preferences, and execution archive.",
+      flex: 1,
       links: [
+        {
+          label: "About Atelier",
+          href: "/about",
+          ariaLabel: "About OVI Atelier Studio",
+          isActive: getIsActive("/about"),
+        },
+        {
+          label: user ? "Profile" : "Sign In",
+          onClick: () => {
+            if (user) {
+              setUserDropdownOpen((prev) => !prev);
+            } else {
+              setAuthModalOpen(true);
+            }
+          },
+          ariaLabel: "User Account & Authentication",
+        },
+        {
+          label: "Settings",
+          onClick: () => openModal(),
+          ariaLabel: "Atelier Preferences & Model Keys",
+        },
         {
           label: "Timeline Archive",
           onClick: () => setHistoryOpen(true),
           ariaLabel: "Open Execution History Drawer",
-        },
-        {
-          label: "Client-Side Vault",
-          onClick: () => openModal(),
-          ariaLabel: "Zero-Retention Client Storage",
-        },
-        {
-          label: "Email Atelier",
-          href: "mailto:support@oviatelier.dev",
-          ariaLabel: "Contact Atelier Studio",
         },
       ],
     },
@@ -158,7 +168,7 @@ export default function Navbar() {
             barHeight={54}
             cardHeight={184}
             maxWidth={1440}
-            radius={20}
+            radius={0}
             inset={7}
             fullWidth={false}
             intro={true}
@@ -171,7 +181,7 @@ export default function Navbar() {
             {/* Theme Toggle Button (Light / Dark) */}
             <button
               onClick={toggleTheme}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded border border-white/[0.08] hover:border-white/20 bg-[#1B1C1E] hover:bg-[#252629] flex items-center justify-center text-[#969087] hover:text-[#E3E2E5] transition-all cursor-pointer"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-none border border-white/[0.08] hover:border-white/20 bg-[#1B1C1E] hover:bg-[#252629] flex items-center justify-center text-[#969087] hover:text-[#E3E2E5] transition-all cursor-pointer"
               title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
             >
               {theme === "dark" ? (
@@ -184,7 +194,7 @@ export default function Navbar() {
             {/* History Archive Trigger */}
             <button
               onClick={() => setHistoryOpen(true)}
-              className="hidden sm:flex items-center space-x-1.5 bg-[#1B1C1E] hover:bg-[#252629] px-2.5 py-1 rounded border border-white/[0.08] hover:border-white/20 transition-all text-[#969087] hover:text-[#E3E2E5] cursor-pointer"
+              className="hidden sm:flex items-center space-x-1.5 bg-[#1B1C1E] hover:bg-[#252629] px-2.5 py-1 rounded-none border border-white/[0.08] hover:border-white/20 transition-all text-[#969087] hover:text-[#E3E2E5] cursor-pointer"
               title="Open Creative History Archive"
             >
               <Clock size={12} className="text-[#CDC6BB]" />
@@ -196,11 +206,11 @@ export default function Navbar() {
             {/* BYOK / Provider Connection Indicator */}
             <button
               onClick={openModal}
-              className="flex items-center space-x-1.5 sm:space-x-2 bg-[#1f2022] hover:bg-[#292a2c] px-2 sm:px-2.5 py-1 rounded border border-white/[0.08] transition-colors cursor-pointer"
+              className="flex items-center space-x-1.5 sm:space-x-2 bg-[#1f2022] hover:bg-[#292a2c] px-2 sm:px-2.5 py-1 rounded-none border border-white/[0.08] transition-colors cursor-pointer"
               title="Configure API Keys & Local Ollama"
             >
               <span
-                className={`w-1.5 h-1.5 rounded-full ${
+                className={`w-1.5 h-1.5 rounded-none ${
                   isConfigured ? "bg-[#9E988E] glow-pip" : "bg-[#7A7E85]"
                 }`}
               ></span>
@@ -216,7 +226,7 @@ export default function Navbar() {
             {/* Settings Trigger Icon */}
             <button
               onClick={openModal}
-              className="hidden sm:flex w-7 h-7 sm:w-8 sm:h-8 rounded items-center justify-center text-[#969087] hover:text-white bg-[#1B1C1E] hover:bg-[#252629] border border-white/[0.08] transition-colors cursor-pointer"
+              className="hidden sm:flex w-7 h-7 sm:w-8 sm:h-8 rounded-none items-center justify-center text-[#969087] hover:text-white bg-[#1B1C1E] hover:bg-[#252629] border border-white/[0.08] transition-colors cursor-pointer"
               title="Preferences & Key Settings"
             >
               <Settings size={13} />
@@ -228,16 +238,16 @@ export default function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="flex items-center gap-1.5 bg-[#1F2022] hover:bg-[#292A2C] border border-white/10 px-2 py-1 rounded transition-colors text-xs font-mono text-[#E3E2E5] cursor-pointer"
+                    className="flex items-center gap-1.5 bg-[#1F2022] hover:bg-[#292A2C] border border-white/10 px-2 py-1 rounded-none transition-colors text-xs font-mono text-[#E3E2E5] cursor-pointer"
                   >
                     {user.photoURL ? (
                       <img
                         src={user.photoURL}
                         alt="User"
-                        className="w-4 h-4 rounded-full object-cover"
+                        className="w-4 h-4 rounded-none object-cover"
                       />
                     ) : (
-                      <div className="w-4 h-4 rounded-full bg-[#9E988E] text-[#0D0E10] font-bold text-[9px] flex items-center justify-center">
+                      <div className="w-4 h-4 rounded-none bg-[#9E988E] text-[#0D0E10] font-bold text-[9px] flex items-center justify-center">
                         {(user.displayName || user.email || "U").charAt(0).toUpperCase()}
                       </div>
                     )}
@@ -250,7 +260,7 @@ export default function Navbar() {
                   {/* User Dropdown Menu */}
                   {userDropdownOpen && (
                     <div
-                      className="absolute right-0 mt-2 w-48 bg-[#121418] border border-white/10 shadow-2xl py-1 text-xs font-mono z-50 animate-in fade-in duration-150 rounded"
+                      className="absolute right-0 mt-2 w-48 bg-[#121418] border border-white/10 shadow-2xl py-1 text-xs font-mono z-50 animate-in fade-in duration-150 rounded-none"
                       onClick={() => setUserDropdownOpen(false)}
                     >
                       <div className="px-3 py-2 border-b border-white/[0.06] text-[#7A7E85] text-[10px]">
