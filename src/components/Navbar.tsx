@@ -99,8 +99,8 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-3 sm:top-4 inset-x-0 z-40 px-3 sm:px-6 pointer-events-none">
-        <div className="pointer-events-auto mx-auto w-full max-w-[880px]">
+      <header className="fixed top-3 sm:top-4 inset-x-0 z-40 px-4 sm:px-6 md:px-8 pointer-events-none">
+        <div className="pointer-events-auto mx-auto w-full max-w-[1440px]">
           <CardNav
             logo={
               <div className="flex items-center gap-2 group cursor-pointer pr-1">
@@ -126,7 +126,7 @@ export default function Navbar() {
             speed={1}
             barHeight={54}
             cardHeight={176}
-            maxWidth={880}
+            maxWidth={1440}
             radius={20}
             inset={7}
             fullWidth={false}
