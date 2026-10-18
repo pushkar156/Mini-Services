@@ -106,7 +106,7 @@ export default function RootLayout({
           <ApiKeyProvider>
             <AuthProvider>
               <Navbar />
-              <div className="pt-12 flex-1 flex flex-col w-full max-w-full overflow-x-hidden">
+              <div className="pt-20 sm:pt-24 flex-1 flex flex-col w-full max-w-full overflow-x-hidden">
                 {children}
               </div>
               <SettingsModal />

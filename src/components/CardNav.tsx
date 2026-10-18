@@ -120,7 +120,7 @@ const THEMES: Record<string, Record<string, string>> = {
 const ROOT =
   'group/cn relative mx-auto h-[var(--cn-bar)] w-full max-w-[var(--cn-max)] text-[14px] leading-[1.4] [-webkit-tap-highlight-color:transparent] z-50';
 const PANEL =
-  'absolute inset-x-0 top-0 z-50 h-[var(--cn-bar)] overflow-hidden rounded-[var(--cn-radius)] border-b border-white/[0.08] dark:border-white/[0.08] [background:var(--cn-panel)] [box-shadow:var(--cn-shadow)] [-webkit-backdrop-filter:var(--cn-blur)] [backdrop-filter:var(--cn-blur)]';
+  'absolute inset-x-0 top-0 z-50 h-[var(--cn-bar)] overflow-hidden rounded-[var(--cn-radius)] [background:var(--cn-panel)] [box-shadow:var(--cn-shadow)] [-webkit-backdrop-filter:var(--cn-blur)] [backdrop-filter:var(--cn-blur)]';
 const RIM =
   'pointer-events-none absolute inset-0 z-[3] rounded-[inherit] [box-shadow:inset_0_0_0_1px_var(--cn-edge),inset_0_1px_0_var(--cn-highlight)]';
 const BAR =

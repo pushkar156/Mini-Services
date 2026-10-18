@@ -99,40 +99,42 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-40">
-        <CardNav
-          logo={
-            <div className="flex items-center gap-2 group cursor-pointer pr-1">
-              <OviLogo size={24} />
-              <div className="flex items-center gap-1.5 font-sans text-xs sm:text-sm font-bold tracking-tight text-[#EDEAE5] uppercase">
-                <span>OVI ATELIER</span>
-                <span className="w-1.5 h-1.5 bg-[#9E988E] inline-block"></span>
+      <header className="fixed top-3 sm:top-4 inset-x-0 z-40 px-3 sm:px-6 pointer-events-none">
+        <div className="pointer-events-auto mx-auto w-full max-w-[880px]">
+          <CardNav
+            logo={
+              <div className="flex items-center gap-2 group cursor-pointer pr-1">
+                <OviLogo size={24} />
+                <div className="flex items-center gap-1.5 font-sans text-xs sm:text-sm font-bold tracking-tight text-[#EDEAE5] uppercase">
+                  <span>OVI ATELIER</span>
+                  <span className="w-1.5 h-1.5 bg-[#9E988E] inline-block"></span>
+                </div>
               </div>
-            </div>
-          }
-          logoHref="/"
-          logoAlt="OVI Atelier Hallmark"
-          items={navItems}
-          theme={theme === "light" ? "light" : "dark"}
-          surface="glass"
-          openOn="click"
-          cardEffect="rise"
-          stagger={0.12}
-          bounce={0.2}
-          menuLabel
-          openLabel="Services"
-          closeLabel="Close"
-          speed={1}
-          barHeight={48}
-          cardHeight={168}
-          radius={0}
-          inset={6}
-          fullWidth
-          intro={false}
-          linkComponent={Link}
-          ariaLabel="OVI Atelier Navigation"
-          className="w-full"
-        >
+            }
+            logoHref="/"
+            logoAlt="OVI Atelier Hallmark"
+            items={navItems}
+            theme={theme === "light" ? "light" : "dark"}
+            surface="glass"
+            openOn="click"
+            cardEffect="rise"
+            stagger={0.12}
+            bounce={0.2}
+            menuLabel
+            openLabel="Services"
+            closeLabel="Close"
+            speed={1}
+            barHeight={54}
+            cardHeight={176}
+            maxWidth={880}
+            radius={20}
+            inset={7}
+            fullWidth={false}
+            intro={true}
+            linkComponent={Link}
+            ariaLabel="OVI Atelier Navigation"
+            className="w-full"
+          >
           {/* Header Utilities Trailing Slot */}
           <div className="flex items-center space-x-1.5 sm:space-x-2">
             {/* Theme Toggle Button (Light / Dark) */}
@@ -257,6 +259,7 @@ export default function Navbar() {
             </div>
           </div>
         </CardNav>
+        </div>
       </header>
 
       {/* History Slide-over Drawer */}
