@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useApiKey } from "@/context/ApiKeyContext";
-import { X, Check, AlertCircle, RefreshCw, Key, Server } from "lucide-react";
+import { X, Check, AlertCircle, RefreshCw, Key, Server, ArrowRight } from "lucide-react";
 
 export default function SettingsModal() {
   const {
@@ -72,14 +73,25 @@ export default function SettingsModal() {
         <div className="flex items-center justify-between pb-4 border-b border-white/10">
           <div>
             <span className="font-mono text-xs uppercase tracking-widest text-[#9E988E]">Atelier Configuration</span>
-            <h2 className="text-xl font-bold font-sans tracking-tight text-white mt-0.5">Model & Provider Settings</h2>
+            <h2 className="text-xl font-bold font-sans tracking-tight text-white mt-0.5">Model &amp; Provider Settings</h2>
           </div>
-          <button
-            onClick={closeModal}
-            className="p-1.5 text-[#7A7E85] hover:text-white transition-colors"
-          >
-            <X size={18} />
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/settings"
+              onClick={closeModal}
+              className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-mono text-[#9E988E] hover:text-white uppercase px-2.5 py-1 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors"
+              title="Expand to Full Settings Page"
+            >
+              <span>Full Settings</span>
+              <ArrowRight size={11} />
+            </Link>
+            <button
+              onClick={closeModal}
+              className="p-1.5 text-[#7A7E85] hover:text-white transition-colors cursor-pointer"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
         {/* Tab Switcher */}
@@ -256,6 +268,26 @@ export default function SettingsModal() {
             <span>{testStatus.message}</span>
           </div>
         )}
+
+        {/* Extended to Full Settings Page */}
+        <div className="mt-6 pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex flex-col">
+            <span className="font-mono text-[10px] text-[#7A7E85] uppercase tracking-wider">
+              Looking for Advanced Controls?
+            </span>
+            <span className="font-sans text-xs text-[#969087]">
+              Audio feedback, local vault export, theme &amp; technical specs
+            </span>
+          </div>
+          <Link
+            href="/settings"
+            onClick={closeModal}
+            className="px-3.5 py-1.5 bg-[#1F2022] hover:bg-[#292A2C] border border-white/20 hover:border-white/40 text-[#EDEAE5] hover:text-white font-mono text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shrink-0 self-start sm:self-auto cursor-pointer"
+          >
+            <span>Full Settings Canvas</span>
+            <ArrowRight size={12} />
+          </Link>
+        </div>
 
       </div>
     </div>

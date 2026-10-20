@@ -20,7 +20,7 @@ import OviLogo from "./OviLogo";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { isConfigured, provider } = useApiKey();
+  const { isConfigured, provider, openModal } = useApiKey();
   const { user, signOutUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -186,11 +186,11 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* 2. BYOK / Provider Connection Indicator (Links to /settings) */}
-            <Link
-              href="/settings"
-              className="flex items-center space-x-1.5 sm:space-x-2 bg-[#1f2022] hover:bg-[#292a2c] px-2 sm:px-2.5 py-1 rounded-none border border-white/[0.08] hover:border-white/20 transition-colors"
-              title="Studio Settings & Neural Keys"
+            {/* 2. BYOK / Provider Connection Indicator (Opens Settings Modal) */}
+            <button
+              onClick={openModal}
+              className="flex items-center space-x-1.5 sm:space-x-2 bg-[#1f2022] hover:bg-[#292a2c] px-2 sm:px-2.5 py-1 rounded-none border border-white/[0.08] hover:border-white/20 transition-colors cursor-pointer"
+              title="Configure API Keys & Local Ollama"
             >
               <span
                 className={`w-1.5 h-1.5 rounded-none ${
@@ -204,7 +204,7 @@ export default function Navbar() {
                   ? "KEY: OK"
                   : "KEY"}
               </span>
-            </Link>
+            </button>
 
             {/* 3. Authentication Control / Profile */}
             <div className="relative pl-1 border-l border-white/[0.08]">
