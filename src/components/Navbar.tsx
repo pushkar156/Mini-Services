@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useApiKey } from "@/context/ApiKeyContext";
@@ -25,6 +26,72 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
 
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [dropdownCoords, setDropdownCoords] = useState<{ top: number; right: number } | null>(null);
+  const profileBtnRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const updateDropdownCoords = () => {
+    if (profileBtnRef.current) {
+      const rect = profileBtnRef.current.getBoundingClientRect();
+      setDropdownCoords({
+        top: rect.bottom + 8,
+        right: Math.max(8, window.innerWidth - rect.right),
+      });
+    }
+  };
+
+  const toggleUserDropdown = () => {
+    if (!userDropdownOpen) {
+      updateDropdownCoords();
+      setUserDropdownOpen(true);
+    } else {
+      setUserDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!userDropdownOpen) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target) &&
+        profileBtnRef.current &&
+        !profileBtnRef.current.contains(target)
+      ) {
+        setUserDropdownOpen(false);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setUserDropdownOpen(false);
+      }
+    };
+
+    const handleReposition = () => {
+      updateDropdownCoords();
+    };
+
+    window.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("resize", handleReposition);
+    window.addEventListener("scroll", handleReposition, true);
+
+    return () => {
+      window.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("resize", handleReposition);
+      window.removeEventListener("scroll", handleReposition, true);
+    };
+  }, [userDropdownOpen]);
+
 
   const getIsActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -78,25 +145,27 @@ export default function Navbar() {
       ],
     },
     {
-      label: "Platform & Setup",
-      description: "Workspace orientation, display settings, and system telemetry.",
+      label: "Pipelines & Setup",
+      description: "Workbench orientation, multi-engine pipelines, and model latency benchmarks.",
       flex: 1,
       links: [
         {
-          label: "Home",
+          label: "Studio Hub",
           href: "/",
           ariaLabel: "Return to Atelier Home",
           isActive: pathname === "/",
         },
         {
-          label: theme === "dark" ? "Light Mode" : "Dark Mode",
-          onClick: () => toggleTheme(),
-          ariaLabel: "Toggle Interface Theme",
+          label: "Workflows & Chains",
+          href: "/workflows",
+          ariaLabel: "Open Multi-Engine Pipelines",
+          isActive: getIsActive("/workflows"),
         },
         {
-          label: "System Telemetry",
-          href: "/#telemetry",
-          ariaLabel: "View System Telemetry Node",
+          label: "Model Diagnostics",
+          href: "/diagnostics",
+          ariaLabel: "View Model Diagnostics and Latency Benchmarks",
+          isActive: getIsActive("/diagnostics"),
         },
       ],
     },
@@ -171,33 +240,34 @@ export default function Navbar() {
             ariaLabel="OVI Atelier Navigation"
             className="w-full"
           >
-          {/* Header Utilities Trailing Slot: Only Theme Toggle, Key, and Profile */}
-          <div className="flex items-center space-x-1.5 sm:space-x-2">
-            {/* 1. Theme Toggle Button (Light / Dark) */}
+          {/* Header Utilities Trailing Slot: Uniform Height & Styling */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* 1. Theme Toggle Button (Light / Dark) - Exact matching height (40px square) */}
             <button
               onClick={toggleTheme}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-none border border-white/[0.08] hover:border-white/20 bg-[#1B1C1E] hover:bg-[#252629] flex items-center justify-center text-[#969087] hover:text-[#E3E2E5] transition-all cursor-pointer"
+              className="inline-flex h-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] w-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] items-center justify-center rounded-none border border-white/10 hover:border-white/20 bg-white/[0.04] hover:bg-white/[0.08] text-[var(--cn-text)] transition-colors cursor-pointer shrink-0"
               title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
+              aria-label="Toggle theme"
             >
               {theme === "dark" ? (
-                <Sun size={13} className="text-[#CDC6BB] hover:rotate-45 transition-transform" />
+                <Sun size={14} className="hover:rotate-45 transition-transform" />
               ) : (
-                <Moon size={13} className="text-[#1A1A1C] hover:-rotate-12 transition-transform" />
+                <Moon size={14} className="hover:-rotate-12 transition-transform" />
               )}
             </button>
 
-            {/* 2. BYOK / Provider Connection Indicator (Opens Settings Modal) */}
+            {/* 2. BYOK / Provider Connection Indicator - Exact matching height (40px) */}
             <button
               onClick={openModal}
-              className="flex items-center space-x-1.5 sm:space-x-2 bg-[#1f2022] hover:bg-[#292a2c] px-2 sm:px-2.5 py-1 rounded-none border border-white/[0.08] hover:border-white/20 transition-colors cursor-pointer"
+              className="inline-flex h-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] items-center gap-2 px-2.5 sm:px-3 rounded-none border border-white/10 hover:border-white/20 bg-white/[0.04] hover:bg-white/[0.08] font-mono text-[11px] uppercase tracking-wider font-semibold text-[var(--cn-text)] transition-colors cursor-pointer shrink-0"
               title="Configure API Keys & Local Ollama"
             >
               <span
                 className={`w-1.5 h-1.5 rounded-none ${
                   isConfigured ? "bg-[#9E988E] glow-pip" : "bg-[#7A7E85]"
                 }`}
-              ></span>
-              <span className="font-mono text-[10px] sm:text-[11px] text-[#cdc6bb] tracking-wider uppercase font-semibold">
+              />
+              <span>
                 {provider === "ollama"
                   ? "OLLAMA"
                   : isConfigured
@@ -206,93 +276,116 @@ export default function Navbar() {
               </span>
             </button>
 
-            {/* 3. Authentication Control / Profile */}
-            <div className="relative pl-1 border-l border-white/[0.08]">
-              {user ? (
-                <div className="relative">
-                  <button
-                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="flex items-center gap-1.5 bg-[#1F2022] hover:bg-[#292A2C] border border-white/10 px-2 py-1 rounded-none transition-colors text-xs font-mono text-[#E3E2E5] cursor-pointer"
-                  >
-                    {user.photoURL ? (
-                      <img
-                        src={user.photoURL}
-                        alt="User"
-                        className="w-4 h-4 rounded-none object-cover"
-                      />
-                    ) : (
-                      <div className="w-4 h-4 rounded-none bg-[#9E988E] text-[#0D0E10] font-bold text-[9px] flex items-center justify-center">
-                        {(user.displayName || user.email || "U").charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                    <span className="max-w-[60px] truncate text-[10px] hidden md:inline">
-                      {user.displayName || user.email?.split("@")[0]}
-                    </span>
-                    <ChevronDown size={10} className="text-[#969087]" />
-                  </button>
-
-                  {/* User Dropdown Menu */}
-                  {userDropdownOpen && (
-                    <div
-                      className="absolute right-0 mt-2 w-48 bg-[#121418] border border-white/10 shadow-2xl py-1 text-xs font-mono z-50 animate-in fade-in duration-150 rounded-none"
-                      onClick={() => setUserDropdownOpen(false)}
-                    >
-                      <div className="px-3 py-2 border-b border-white/[0.06] text-[#7A7E85] text-[10px]">
-                        <p className="text-[#EDEAE5] font-semibold truncate">
-                          {user.displayName || "Atelier User"}
-                        </p>
-                        <p className="truncate">{user.email}</p>
-                      </div>
-
-                      <Link
-                        href="/profile"
-                        className="w-full px-3 py-2 text-left hover:bg-[#1F2022] text-[#CDC6BB] flex items-center gap-2"
-                      >
-                        <UserIcon size={12} />
-                        <span>Operator Profile</span>
-                      </Link>
-
-                      <Link
-                        href="/history"
-                        className="w-full px-3 py-2 text-left hover:bg-[#1F2022] text-[#CDC6BB] flex items-center gap-2"
-                      >
-                        <Clock size={12} />
-                        <span>Timeline History</span>
-                      </Link>
-
-                      <Link
-                        href="/settings"
-                        className="w-full px-3 py-2 text-left hover:bg-[#1F2022] text-[#CDC6BB] flex items-center gap-2"
-                      >
-                        <Settings size={12} />
-                        <span>Studio Settings</span>
-                      </Link>
-
-                      <button
-                        onClick={() => signOutUser()}
-                        className="w-full px-3 py-2 text-left hover:bg-red-500/10 text-red-400 flex items-center gap-2 border-t border-white/[0.06] cursor-pointer"
-                      >
-                        <LogOut size={12} />
-                        <span>Sign Out</span>
-                      </button>
+            {/* 3. Authentication Control / Profile - Exact matching height (40px) */}
+            {user ? (
+              <div className="relative shrink-0">
+                <button
+                  ref={profileBtnRef}
+                  onClick={toggleUserDropdown}
+                  aria-expanded={userDropdownOpen}
+                  aria-haspopup="true"
+                  className="inline-flex h-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] items-center gap-2 px-2.5 sm:px-3 rounded-none border border-white/10 hover:border-white/20 bg-white/[0.04] hover:bg-white/[0.08] font-mono text-[11px] uppercase tracking-wider font-semibold text-[var(--cn-text)] transition-colors cursor-pointer"
+                >
+                  {user.photoURL ? (
+                    <img
+                      src={user.photoURL}
+                      alt="User"
+                      className="w-4 h-4 rounded-none object-cover"
+                    />
+                  ) : (
+                    <div className="w-4 h-4 rounded-none bg-[#9E988E] text-[#0D0E10] font-bold text-[9px] flex items-center justify-center">
+                      {(user.displayName || user.email || "U").charAt(0).toUpperCase()}
                     </div>
                   )}
-                </div>
-              ) : (
-                <Link
-                  href="/profile"
-                  className="px-2 sm:px-2.5 py-1 bg-[#1F2022] hover:bg-[#292A2C] border border-white/10 hover:border-white/20 text-[#CDC6BB] hover:text-white rounded-none font-mono text-[10px] uppercase tracking-wider transition-colors flex items-center gap-1.5"
-                  title="Operator Profile &amp; Sign In"
-                >
-                  <UserIcon size={11} />
-                  <span className="hidden xs:inline">Profile</span>
-                </Link>
-              )}
-            </div>
+                  <span className="max-w-[70px] truncate hidden md:inline">
+                    {user.displayName || user.email?.split("@")[0]}
+                  </span>
+                  <ChevronDown
+                    size={11}
+                    className={`text-[#969087] transition-transform duration-200 ${
+                      userDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/profile"
+                className="inline-flex h-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] items-center gap-2 px-2.5 sm:px-3 rounded-none border border-white/10 hover:border-white/20 bg-white/[0.04] hover:bg-white/[0.08] font-mono text-[11px] uppercase tracking-wider font-semibold text-[var(--cn-text)] transition-colors shrink-0"
+                title="Operator Profile &amp; Sign In"
+              >
+                <UserIcon size={12} />
+                <span className="hidden xs:inline">Profile</span>
+              </Link>
+            )}
           </div>
         </CardNav>
         </div>
       </header>
+
+      {/* Portal Profile Dropdown Menu - Escapes CardNav overflow-hidden clipping */}
+      {mounted &&
+        userDropdownOpen &&
+        dropdownCoords &&
+        createPortal(
+          <div
+            ref={dropdownRef}
+            style={{
+              position: "fixed",
+              top: `${dropdownCoords.top}px`,
+              right: `${dropdownCoords.right}px`,
+            }}
+            className="w-52 bg-[#121418] border border-white/10 shadow-[0_16px_36px_rgba(0,0,0,0.6)] py-1 text-xs font-mono z-[99999] animate-in fade-in zoom-in-95 duration-150 rounded-none backdrop-blur-md"
+          >
+            <div className="px-3 py-2 border-b border-white/[0.06] text-[#7A7E85] text-[10px]">
+              <p className="text-[#EDEAE5] font-semibold truncate">
+                {user?.displayName || "Atelier User"}
+              </p>
+              <p className="truncate text-[#969087]">{user?.email}</p>
+            </div>
+
+            <div className="py-1">
+              <Link
+                href="/profile"
+                onClick={() => setUserDropdownOpen(false)}
+                className="w-full px-3 py-2 text-left hover:bg-[#1F2022] text-[#CDC6BB] hover:text-white flex items-center gap-2 transition-colors"
+              >
+                <UserIcon size={12} className="text-[#9E988E]" />
+                <span>Operator Profile</span>
+              </Link>
+
+              <Link
+                href="/history"
+                onClick={() => setUserDropdownOpen(false)}
+                className="w-full px-3 py-2 text-left hover:bg-[#1F2022] text-[#CDC6BB] hover:text-white flex items-center gap-2 transition-colors"
+              >
+                <Clock size={12} className="text-[#9E988E]" />
+                <span>Timeline History</span>
+              </Link>
+
+              <Link
+                href="/settings"
+                onClick={() => setUserDropdownOpen(false)}
+                className="w-full px-3 py-2 text-left hover:bg-[#1F2022] text-[#CDC6BB] hover:text-white flex items-center gap-2 transition-colors"
+              >
+                <Settings size={12} className="text-[#9E988E]" />
+                <span>Studio Settings</span>
+              </Link>
+            </div>
+
+            <button
+              onClick={() => {
+                setUserDropdownOpen(false);
+                signOutUser();
+              }}
+              className="w-full px-3 py-2 text-left hover:bg-red-500/10 text-red-400 hover:text-red-300 flex items-center gap-2 border-t border-white/[0.06] cursor-pointer transition-colors"
+            >
+              <LogOut size={12} />
+              <span>Sign Out</span>
+            </button>
+          </div>,
+          document.body
+        )}
     </>
   );
 }
