@@ -16,16 +16,14 @@ import {
   Moon,
 } from "lucide-react";
 import CardNav, { CardNavItem } from "./CardNav";
-import { HistoryDrawer } from "./HistoryDrawer";
 import OviLogo from "./OviLogo";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { isConfigured, provider, openModal } = useApiKey();
-  const { user, setAuthModalOpen, signOutUser } = useAuth();
+  const { isConfigured, provider } = useApiKey();
+  const { user, signOutUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
-  const [historyOpen, setHistoryOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const getIsActive = (href: string) => {
@@ -173,9 +171,9 @@ export default function Navbar() {
             ariaLabel="OVI Atelier Navigation"
             className="w-full"
           >
-          {/* Header Utilities Trailing Slot */}
+          {/* Header Utilities Trailing Slot: Only Theme Toggle, Key, and Profile */}
           <div className="flex items-center space-x-1.5 sm:space-x-2">
-            {/* Theme Toggle Button (Light / Dark) */}
+            {/* 1. Theme Toggle Button (Light / Dark) */}
             <button
               onClick={toggleTheme}
               className="w-7 h-7 sm:w-8 sm:h-8 rounded-none border border-white/[0.08] hover:border-white/20 bg-[#1B1C1E] hover:bg-[#252629] flex items-center justify-center text-[#969087] hover:text-[#E3E2E5] transition-all cursor-pointer"
@@ -188,23 +186,11 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* History Archive Trigger */}
-            <button
-              onClick={() => setHistoryOpen(true)}
-              className="hidden sm:flex items-center space-x-1.5 bg-[#1B1C1E] hover:bg-[#252629] px-2.5 py-1 rounded-none border border-white/[0.08] hover:border-white/20 transition-all text-[#969087] hover:text-[#E3E2E5] cursor-pointer"
-              title="Open Creative History Archive"
-            >
-              <Clock size={12} className="text-[#CDC6BB]" />
-              <span className="font-mono text-[10px] uppercase tracking-wider">
-                Archive
-              </span>
-            </button>
-
-            {/* BYOK / Provider Connection Indicator */}
-            <button
-              onClick={openModal}
-              className="flex items-center space-x-1.5 sm:space-x-2 bg-[#1f2022] hover:bg-[#292a2c] px-2 sm:px-2.5 py-1 rounded-none border border-white/[0.08] transition-colors cursor-pointer"
-              title="Configure API Keys & Local Ollama"
+            {/* 2. BYOK / Provider Connection Indicator (Links to /settings) */}
+            <Link
+              href="/settings"
+              className="flex items-center space-x-1.5 sm:space-x-2 bg-[#1f2022] hover:bg-[#292a2c] px-2 sm:px-2.5 py-1 rounded-none border border-white/[0.08] hover:border-white/20 transition-colors"
+              title="Studio Settings & Neural Keys"
             >
               <span
                 className={`w-1.5 h-1.5 rounded-none ${
@@ -218,18 +204,9 @@ export default function Navbar() {
                   ? "KEY: OK"
                   : "KEY"}
               </span>
-            </button>
+            </Link>
 
-            {/* Settings Trigger Icon */}
-            <button
-              onClick={openModal}
-              className="hidden sm:flex w-7 h-7 sm:w-8 sm:h-8 rounded-none items-center justify-center text-[#969087] hover:text-white bg-[#1B1C1E] hover:bg-[#252629] border border-white/[0.08] transition-colors cursor-pointer"
-              title="Preferences & Key Settings"
-            >
-              <Settings size={13} />
-            </button>
-
-            {/* Authentication Control */}
+            {/* 3. Authentication Control / Profile */}
             <div className="relative pl-1 border-l border-white/[0.08]">
               {user ? (
                 <div className="relative">
@@ -302,22 +279,20 @@ export default function Navbar() {
                   )}
                 </div>
               ) : (
-                <button
-                  onClick={() => setAuthModalOpen(true)}
-                  className="px-2 sm:px-2.5 py-1 bg-[#1F2022] hover:bg-[#292A2C] border border-white/10 text-[#CDC6BB] hover:text-white rounded font-mono text-[10px] uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer"
+                <Link
+                  href="/profile"
+                  className="px-2 sm:px-2.5 py-1 bg-[#1F2022] hover:bg-[#292A2C] border border-white/10 hover:border-white/20 text-[#CDC6BB] hover:text-white rounded-none font-mono text-[10px] uppercase tracking-wider transition-colors flex items-center gap-1.5"
+                  title="Operator Profile &amp; Sign In"
                 >
                   <UserIcon size={11} />
-                  <span className="hidden xs:inline">Sign In</span>
-                </button>
+                  <span className="hidden xs:inline">Profile</span>
+                </Link>
               )}
             </div>
           </div>
         </CardNav>
         </div>
       </header>
-
-      {/* History Slide-over Drawer */}
-      <HistoryDrawer isOpen={historyOpen} onClose={() => setHistoryOpen(false)} />
     </>
   );
 }

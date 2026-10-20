@@ -129,7 +129,7 @@ const PANEL =
 const RIM =
   'pointer-events-none absolute inset-0 z-[3] rounded-[inherit] [box-shadow:inset_0_0_0_1px_var(--cn-edge),inset_0_1px_0_var(--cn-highlight)]';
 const BAR =
-  'relative z-[2] box-border flex h-[var(--cn-bar)] items-center justify-between px-[var(--cn-inset)]';
+  'relative z-[2] box-border grid grid-cols-[1fr_auto_1fr] items-center h-[var(--cn-bar)] px-[var(--cn-inset)]';
 const MENU =
   'inline-flex h-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] cursor-pointer items-center gap-[9px] rounded-[var(--cn-inner-radius)] border border-white/10 dark:border-white/10 light:border-black/10 px-[12px] bg-white/[0.04] dark:bg-white/[0.04] font-mono text-[11px] uppercase tracking-wider font-semibold text-[var(--cn-text)] outline-none transition-all duration-200 ease-[ease] hover:bg-white/[0.08] hover:border-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--cn-ring)] data-[icon-only]:w-[calc(var(--cn-bar)_-_var(--cn-inset)*2)] data-[icon-only]:justify-center data-[icon-only]:p-0';
 const BURGER = 'relative h-[12px] w-[18px]';
@@ -544,13 +544,8 @@ const CardNav = ({
     >
       <nav ref={panelRef} className={PANEL} aria-label={ariaLabel}>
         <div ref={barRef} className={BAR}>
-          <div className="flex items-center gap-2 sm:gap-3">
-            {logo && (
-              <LinkComponent href={logoHref} className={LOGO} aria-label={logoAlt}>
-                {typeof logo === 'string' ? <img src={logo} alt="" draggable={false} /> : logo}
-              </LinkComponent>
-            )}
-
+          {/* Left Column: Menu Button */}
+          <div className="flex items-center justify-start min-w-0">
             <button
               ref={menuRef}
               type="button"
@@ -578,7 +573,17 @@ const CardNav = ({
             </button>
           </div>
 
-          <div className="flex items-center justify-self-end gap-1.5 sm:gap-2">
+          {/* Center Column: Centered Logo */}
+          <div className="flex items-center justify-center min-w-0">
+            {logo && (
+              <LinkComponent href={logoHref} className={LOGO} aria-label={logoAlt}>
+                {typeof logo === 'string' ? <img src={logo} alt="" draggable={false} /> : logo}
+              </LinkComponent>
+            )}
+          </div>
+
+          {/* Right Column: Utilities & Profile */}
+          <div className="flex items-center justify-end gap-1.5 sm:gap-2 min-w-0">
             {children}
             {cta && !narrow && ctaButton(cta, false)}
           </div>
