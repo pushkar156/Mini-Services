@@ -104,7 +104,7 @@ export default function Navbar() {
     },
     {
       label: "Trust & Atelier",
-      description: "Studio pedigree, account profile, preferences, and execution archive.",
+      description: "Studio pedigree, operator profile, neural settings, and history chronicles.",
       flex: 1,
       links: [
         {
@@ -114,25 +114,22 @@ export default function Navbar() {
           isActive: getIsActive("/about"),
         },
         {
-          label: user ? "Profile" : "Sign In",
-          onClick: () => {
-            if (user) {
-              setUserDropdownOpen((prev) => !prev);
-            } else {
-              setAuthModalOpen(true);
-            }
-          },
-          ariaLabel: "User Account & Authentication",
+          label: "Profile",
+          href: "/profile",
+          ariaLabel: "Operator Profile & Session Canvas",
+          isActive: getIsActive("/profile"),
         },
         {
           label: "Settings",
-          onClick: () => openModal(),
+          href: "/settings",
           ariaLabel: "Atelier Preferences & Model Keys",
+          isActive: getIsActive("/settings"),
         },
         {
-          label: "Timeline Archive",
-          onClick: () => setHistoryOpen(true),
-          ariaLabel: "Open Execution History Drawer",
+          label: "History Archive",
+          href: "/history",
+          ariaLabel: "Open Creative History Chronicles",
+          isActive: getIsActive("/history"),
         },
       ],
     },
@@ -270,13 +267,29 @@ export default function Navbar() {
                         <p className="truncate">{user.email}</p>
                       </div>
 
-                      <button
-                        onClick={() => setHistoryOpen(true)}
-                        className="w-full px-3 py-2 text-left hover:bg-[#1F2022] text-[#CDC6BB] flex items-center gap-2 cursor-pointer"
+                      <Link
+                        href="/profile"
+                        className="w-full px-3 py-2 text-left hover:bg-[#1F2022] text-[#CDC6BB] flex items-center gap-2"
+                      >
+                        <UserIcon size={12} />
+                        <span>Operator Profile</span>
+                      </Link>
+
+                      <Link
+                        href="/history"
+                        className="w-full px-3 py-2 text-left hover:bg-[#1F2022] text-[#CDC6BB] flex items-center gap-2"
                       >
                         <Clock size={12} />
-                        <span>Timeline Archive</span>
-                      </button>
+                        <span>Timeline History</span>
+                      </Link>
+
+                      <Link
+                        href="/settings"
+                        className="w-full px-3 py-2 text-left hover:bg-[#1F2022] text-[#CDC6BB] flex items-center gap-2"
+                      >
+                        <Settings size={12} />
+                        <span>Studio Settings</span>
+                      </Link>
 
                       <button
                         onClick={() => signOutUser()}

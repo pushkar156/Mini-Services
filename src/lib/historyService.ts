@@ -10,6 +10,7 @@ import {
   serverTimestamp,
   onSnapshot,
   Timestamp,
+  getDocs,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -97,4 +98,15 @@ export async function removeHistoryItem(userId: string, itemId: string): Promise
   if (!userId || !itemId) return;
   const docRef = doc(db, "users", userId, "history", itemId);
   await deleteDoc(docRef);
+}
+
+/**
+ * Purge all history records for a user
+ */
+export async function clearAllUserHistory(userId: string): Promise<void> {
+  if (!userId) return;
+  const historyCollection = collection(db, "users", userId, "history");
+  const snapshot = await getDocs(historyCollection);
+  const deletePromises = snapshot.docs.map((docSnap) => deleteDoc(docSnap.ref));
+  await Promise.all(deletePromises);
 }
