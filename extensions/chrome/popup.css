@@ -1,0 +1,280 @@
+/* OVI Prompt Enhancer — Popup Styles */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 380px;
+  background-color: #0E1013;
+  color: #EDEAE5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "JetBrains Mono", sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  user-select: none;
+}
+
+.ovi-popup-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.ovi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #121519;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ovi-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ovi-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #CDC6BB;
+  box-shadow: 0 0 6px rgba(205, 198, 187, 0.5);
+}
+
+.ovi-title {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #EDEAE5;
+}
+
+.ovi-icon-btn {
+  background: transparent;
+  border: none;
+  color: #7A7E85;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: all 0.15s;
+}
+
+.ovi-icon-btn:hover {
+  color: #EDEAE5;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Settings Drawer */
+.ovi-settings-drawer {
+  padding: 12px 16px;
+  background-color: #16191E;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ovi-settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.ovi-msg-ok {
+  font-size: 10px;
+  color: #34D399;
+  font-family: monospace;
+}
+
+/* Main */
+.ovi-main {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ovi-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ovi-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9E988E;
+}
+
+.ovi-meta {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: #6E737D;
+}
+
+.ovi-badge {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background-color: rgba(52, 211, 153, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+/* Form inputs */
+textarea {
+  width: 100%;
+  background-color: #121519;
+  color: #EDEAE5;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 8px 10px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+textarea:focus {
+  border-color: #CDC6BB;
+}
+
+textarea::placeholder {
+  color: #555860;
+}
+
+.ovi-controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.ovi-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+  width: 100%;
+  height: 28px;
+  background-color: #121519;
+  color: #EDEAE5;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 0 8px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  outline: none;
+}
+
+select:focus,
+input:focus {
+  border-color: #CDC6BB;
+}
+
+/* Buttons */
+.ovi-btn {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+
+.ovi-btn-primary {
+  background-color: #CDC6BB;
+  color: #0E1013;
+}
+
+.ovi-btn-primary:hover {
+  background-color: #E2DDD5;
+}
+
+.ovi-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.ovi-btn-secondary {
+  flex: 1;
+  background-color: #1A1D23;
+  color: #CDC6BB;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ovi-btn-secondary:hover {
+  background-color: #232830;
+  border-color: #CDC6BB;
+}
+
+.ovi-btn-sm {
+  padding: 4px 8px;
+  font-size: 10px;
+  background-color: #292E36;
+  color: #EDEAE5;
+}
+
+.ovi-output-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Spinner */
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #0E1013;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Footer */
+.ovi-footer {
+  padding: 8px 16px;
+  background-color: #121519;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  color: #6E737D;
+  text-align: center;
+}
+
+.hidden {
+  display: none !important;
+}
+

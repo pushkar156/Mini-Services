@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OVI Prompt Enhancer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="ovi-popup-container">
+    <!-- Header -->
+    <header class="ovi-header">
+      <div class="ovi-brand">
+        <span class="ovi-dot"></span>
+        <span class="ovi-title">OVI // ENHANCER</span>
+      </div>
+      <button id="toggle-settings" class="ovi-icon-btn" title="Settings & API">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Settings Drawer (Hidden by default) -->
+    <div id="settings-panel" class="ovi-settings-drawer hidden">
+      <div class="ovi-field">
+        <label>API Endpoint</label>
+        <input type="text" id="api-url" placeholder="http://localhost:3000/api/enhance" />
+      </div>
+      <div class="ovi-field">
+        <label>Custom Gemini Key (Optional BYOK)</label>
+        <input type="password" id="api-key" placeholder="AIzaSy..." />
+      </div>
+      <div class="ovi-settings-actions">
+        <button id="save-settings" class="ovi-btn ovi-btn-sm">Save Config</button>
+        <span id="settings-saved-msg" class="ovi-msg-ok hidden">Saved</span>
+      </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <main class="ovi-main">
+      <!-- Input Field -->
+      <div class="ovi-section">
+        <div class="ovi-section-head">
+          <label for="prompt-input">Draft Prompt</label>
+          <span id="char-count" class="ovi-meta">0 words</span>
+        </div>
+        <textarea id="prompt-input" rows="4" placeholder="Enter your raw prompt or idea..."></textarea>
+      </div>
+
+      <!-- Controls Row -->
+      <div class="ovi-controls-grid">
+        <div class="ovi-field">
+          <label>Archetype</label>
+          <select id="style-select">
+            <option value="coding" selected>Coding & Specs</option>
+            <option value="agentic">Autonomous Agent</option>
+            <option value="reasoning">Chain-of-Thought</option>
+            <option value="concise">Concise & Direct</option>
+            <option value="creative">Creative Nuance</option>
+          </select>
+        </div>
+
+        <div class="ovi-field">
+          <label>Target Model</label>
+          <select id="model-select">
+            <option value="claude" selected>Claude 3.7 (XML)</option>
+            <option value="gemini">Gemini 2.5</option>
+            <option value="gpt4">GPT-4o</option>
+            <option value="deepseek">DeepSeek R1</option>
+            <option value="general">Universal Clean</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <button id="enhance-btn" class="ovi-btn ovi-btn-primary">
+        <span id="btn-text">Fortify Prompt</span>
+        <span id="btn-spinner" class="spinner hidden"></span>
+      </button>
+
+      <!-- Output Section (Hidden until generated) -->
+      <div id="output-section" class="ovi-section hidden">
+        <div class="ovi-section-head">
+          <label>Fortified Production Prompt</label>
+          <span id="ratio-badge" class="ovi-badge">+120%</span>
+        </div>
+        <textarea id="prompt-output" rows="6" readonly></textarea>
+        
+        <div class="ovi-output-actions">
+          <button id="copy-btn" class="ovi-btn ovi-btn-secondary">Copy</button>
+          <button id="insert-btn" class="ovi-btn ovi-btn-secondary">Insert in Page</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer Status -->
+    <footer class="ovi-footer">
+      <span id="status-text">Ready • Shortcut: Alt+Shift+E</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+

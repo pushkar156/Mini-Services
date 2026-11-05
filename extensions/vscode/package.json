@@ -1,0 +1,119 @@
+{
+  "name": "ovi-prompt-enhancer",
+  "displayName": "OVI Prompt Enhancer",
+  "description": "Principal Prompt Engineering for VS Code & Antigravity — Elevate, fortify, and structure prompts with production guardrails.",
+  "version": "1.0.0",
+  "publisher": "ovi-atelier",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "AI",
+    "Programming Languages",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "prompt engineering",
+    "claude",
+    "gemini",
+    "gpt-4o",
+    "deepseek",
+    "agent",
+    "cot"
+  ],
+  "activationEvents": [
+    "onCommand:ovi.enhancePrompt",
+    "onCommand:ovi.enhancePromptCode",
+    "onCommand:ovi.enhancePromptAgent",
+    "onCommand:ovi.enhancePromptCoT",
+    "onCommand:ovi.enhancePromptConcise"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ovi.enhancePrompt",
+        "title": "OVI: Enhance Prompt (Choose Archetype)",
+        "category": "OVI"
+      },
+      {
+        "command": "ovi.enhancePromptCode",
+        "title": "OVI: Enhance Prompt (Coding & Specs)",
+        "category": "OVI"
+      },
+      {
+        "command": "ovi.enhancePromptAgent",
+        "title": "OVI: Enhance Prompt (Autonomous Agent)",
+        "category": "OVI"
+      },
+      {
+        "command": "ovi.enhancePromptCoT",
+        "title": "OVI: Enhance Prompt (Chain-of-Thought)",
+        "category": "OVI"
+      },
+      {
+        "command": "ovi.enhancePromptConcise",
+        "title": "OVI: Enhance Prompt (Concise & Dense)",
+        "category": "OVI"
+      },
+      {
+        "command": "ovi.configureSettings",
+        "title": "OVI: Configure Prompt Enhancer Settings",
+        "category": "OVI"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "ovi.enhancePrompt",
+        "key": "ctrl+alt+e",
+        "mac": "cmd+alt+e",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "ovi.enhancePrompt",
+          "when": "editorHasSelection",
+          "group": "1_modification"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "OVI Prompt Enhancer",
+      "properties": {
+        "ovi.promptEnhancer.apiUrl": {
+          "type": "string",
+          "default": "http://localhost:3000/api/enhance",
+          "description": "API URL for OVI Prompt Enhancer endpoint (local or deployed Vercel URL)."
+        },
+        "ovi.promptEnhancer.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Optional custom Gemini API Key (BYOK) passed as header."
+        },
+        "ovi.promptEnhancer.defaultStyle": {
+          "type": "string",
+          "enum": ["coding", "agentic", "reasoning", "concise", "creative"],
+          "default": "coding",
+          "description": "Default enhancement archetype."
+        },
+        "ovi.promptEnhancer.targetModel": {
+          "type": "string",
+          "enum": ["claude", "gemini", "gpt4", "deepseek", "general"],
+          "default": "claude",
+          "description": "Target AI architecture for syntax and tag formatting."
+        },
+        "ovi.promptEnhancer.actionOnEnhance": {
+          "type": "string",
+          "enum": ["replace", "insertBelow", "diffView", "clipboard"],
+          "default": "replace",
+          "description": "What to do with the enhanced prompt output."
+        }
+      }
+    }
+  }
+}
+
