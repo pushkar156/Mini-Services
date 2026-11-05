@@ -142,6 +142,12 @@ export default function Navbar() {
           ariaLabel: "Open Media Downloader",
           isActive: getIsActive("/mediadrop"),
         },
+        {
+          label: "Prompt Enhancer",
+          href: "/enhancer",
+          ariaLabel: "Open Prompt Enhancer",
+          isActive: getIsActive("/enhancer"),
+        },
       ],
     },
     {

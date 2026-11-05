@@ -14,6 +14,7 @@ import {
   Cpu,
   ArrowRight,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 
@@ -83,6 +84,17 @@ const SERVICES = [
     route: "GET /photonarrator",
     href: "/photonarrator",
     icon: Camera,
+  },
+  {
+    id: "enhancer",
+    engine: "ENGINE 07",
+    metric: "SYNTHESIS: STEERABLE",
+    title: "Prompt Enhancer",
+    desc: "Principal prompt engineering atelier. Synthesizes raw user instructions into master-grade production prompts with XML schema & negative guardrails.",
+    badges: ["Agentic Protocol", "XML Guardrails", "CoT Reasoning"],
+    route: "GET /enhancer",
+    href: "/enhancer",
+    icon: Sparkles,
   },
 ];
 
