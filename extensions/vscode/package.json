@@ -23,13 +23,6 @@
     "agent",
     "cot"
   ],
-  "activationEvents": [
-    "onCommand:ovi.enhancePrompt",
-    "onCommand:ovi.enhancePromptCode",
-    "onCommand:ovi.enhancePromptAgent",
-    "onCommand:ovi.enhancePromptCoT",
-    "onCommand:ovi.enhancePromptConcise"
-  ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
